@@ -21,8 +21,7 @@
         "test:watch": "jest --config jest-unit.config.json --watch",
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
-        "deploy:site": "gh-pages -d site -b master && run-s -s docs build:site ",
-        "docs": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.md --out docs src",
+        "docs": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
         "clean": "echo 'Cleaning...' && rimraf dist && rimraf docs && rimraf site && rimraf coverage"
     },
     "watch": {
@@ -41,8 +40,6 @@
         "@types/benchmark": "^1.0.31",
         "@types/jest": "^23.3.9",
         "@types/node": "^10.12.5",
-        "benchmark": "^2.1.4",
-        "gh-pages": "^2.0.1",
         "http-server": "^0.11.1",
         "husky": "^1.1.3",
         "jest": "^23.6.0",

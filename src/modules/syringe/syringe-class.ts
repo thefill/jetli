@@ -2,7 +2,7 @@ import {IInjection} from './injection';
 
 export interface ISyringe {
     set: (key: string, Dependency: new () => IInjection) => void;
-    get: (Dependency: new () => IInjection | string) => any;
+    get: (Dependency: (new () => IInjection) | string) => any;
 }
 
 export class Syringe implements ISyringe {
@@ -28,7 +28,7 @@ export class Syringe implements ISyringe {
      * @param {IInjection | string} Dependency
      * @returns {any}
      */
-    public get(Dependency: new () => IInjection | string): any {
+    public get(Dependency: (new () => IInjection) | string): any {
         if (typeof Dependency === 'string') {
             if (!this.dependencies[Dependency]) {
                 throw new Error(`Injectable with key ${Dependency} not registered`);
