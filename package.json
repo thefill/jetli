@@ -7,13 +7,10 @@
     "typings": "dist/esm/index.d.ts",
     "scripts": {
         "// DEV SCRIPTS //": "-------------------------------------------------------",
-        "start": "run-s -s watch:example",
         "watch": "npm-watch build",
         "build": "run-s -s clean build:esm build:cjs",
         "build:esm": "echo 'Building esm...' && tsc -p tsconfig.esm.json",
         "build:cjs": "echo 'Building cjs...' && tsc -p tsconfig.cjs.json",
-        "watch:example": "parcel src/demo/index.html",
-        "build:example": "parcel build src/demo/index.html",
         "// CODE QUALITY SCRIPTS //": "----------------------------------------------",
         "lint": "tslint -c tslint.json src/*.ts",
         "test": "jest --config jest-unit.config.json",
