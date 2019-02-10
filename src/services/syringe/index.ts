@@ -1,3 +1,1 @@
-export {IInjection} from './injection';
-export {ISyringe} from './syringe.class';
-export {syringeService} from './syringe.service';
+export {syringe} from './syringe.service';

@@ -1,1 +1,1 @@
-export {IInjection} from './injection';
+export {IInjection} from './injection.interface';

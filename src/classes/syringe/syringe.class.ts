@@ -1,5 +1,8 @@
 import {IInjection, ISyringe} from '../../interfaces';
 
+/**
+ * Main class for dependency injector.
+ */
 export class Syringe implements ISyringe {
 
     /**
