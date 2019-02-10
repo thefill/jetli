@@ -1,7 +1,7 @@
 {
     "name": "syringe",
     "version": "0.0.1",
-    "description": "Service injector",
+    "description": "Dependency injector",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "typings": "dist/esm/index.d.ts",
@@ -9,8 +9,8 @@
         "// DEV SCRIPTS //": "-------------------------------------------------------",
         "watch": "npm-watch build",
         "build": "run-s -s clean build:esm build:cjs",
-        "build:esm": "echo 'Building esm...' && tsc -p tsconfig.esm.json",
-        "build:cjs": "echo 'Building cjs...' && tsc -p tsconfig.cjs.json",
+        "build:esm": "tsc -p tsconfig.esm.json",
+        "build:cjs": "tsc -p tsconfig.cjs.json",
         "// CODE QUALITY SCRIPTS //": "----------------------------------------------",
         "lint": "tslint -c tslint.json src/*.ts",
         "test": "jest --config jest-unit.config.json",
@@ -18,8 +18,10 @@
         "test:watch": "jest --config jest-unit.config.json --watch",
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
-        "docs": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
-        "clean": "echo 'Cleaning...' && rimraf dist && rimraf docs && rimraf site && rimraf coverage"
+        "docs": "run-s docs:html docs:md",
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
+        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --theme markdown --mdEngine github --out / src",
+        "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage"
     },
     "watch": {
         "build": {
@@ -33,31 +35,32 @@
             "quiet": false
         }
     },
+    "dependencies": {},
     "devDependencies": {
-        "@types/benchmark": "^1.0.31",
-        "@types/jest": "^23.3.9",
-        "@types/node": "^10.12.5",
-        "http-server": "^0.11.1",
-        "husky": "^1.1.3",
-        "jest": "^23.6.0",
-        "node-sass": "^4.10.0",
-        "npm-run-all": "^4.1.3",
-        "npm-watch": "^0.5.0",
-        "parcel": "^1.10.3",
-        "rimraf": "^2.6.2",
-        "ts-jest": "^23.10.4",
-        "tslint": "^5.11.0",
-        "typedoc": "^0.13.0",
-        "typescript": "^3.1.6"
+        "@types/benchmark": "1.0.31",
+        "@types/jest": "23.3.9",
+        "@types/node": "10.12.5",
+        "http-server": "0.11.1",
+        "husky": "1.1.3",
+        "jest": "23.6.0",
+        "node-sass": "4.10.0",
+        "npm-run-all": "4.1.3",
+        "npm-watch": "0.5.0",
+        "parcel": "1.10.3",
+        "rimraf": "2.6.2",
+        "ts-jest": "23.10.4",
+        "tslint": "5.11.0",
+        "typedoc": "0.13.0",
+        "typescript": "3.1.6",
+        "typedoc-plugin-markdown": "1.1.26"
     },
     "engines": {
-        "node": ">=6.1"
+        "node": ">=6.11.5"
     },
-    "author": "Filip Dabrowski",
+    "author": "Filip Dabrowski & Javascript Ltd.",
     "repository": {
         "type": "git",
-        "url": "git@github.com:thefill/entrepot.git"
+        "url": "git@github.com:thefill/syringe.git"
     },
-    "license": "MIT",
-    "dependencies": {}
+    "license": "MIT"
 }
