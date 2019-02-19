@@ -1,4 +1,4 @@
-import {Syringe} from '../../classes/syringe/syringe.class';
+import {Syringe} from '../../classes';
 
 // Instantiate dependency injection to adhere to singleton concept
 const syringe = new Syringe();

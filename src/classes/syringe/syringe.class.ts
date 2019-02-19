@@ -1,4 +1,4 @@
-import {IInjection, ISyringe} from '../../interfaces';
+import {IDependencyConfig, IInjection, ISyringe} from '../../interfaces';
 
 /**
  * Main class for dependency injector.
@@ -11,32 +11,44 @@ export class Syringe implements ISyringe {
      * @returns {boolean}
      */
     protected static isConstructor(argument) {
-        return typeof argument === 'function';
+        return typeof argument === 'function' && argument.name;
     }
 
-    protected dependencies: { [key: string]: IInjection | any } = {};
-    protected instantiatedDependencies: { [key: string]: IInjection | any } = {};
+    protected dependencies: { [key: string]: IDependencyConfig } = {};
+    protected instantiatedDependencies: { [key: string]: IDependencyConfig } = {};
 
     /**
      * Register dependency (also primitive values) by key - will be initialised
      * immediately if initialise set to true.
      * @param {string} key
      * @param {{new(): (IInjection | T)}} Dependency
-     * @param {boolean} initialise Should Syringe initialise immediately
+     * @param {boolean} initialiseOnRequest Should Syringe initialise immediately,
+     *                                          or delay till injection requested
+     * @param constructorArgs {...any} Arguments that should be passed to dependency
+     *                                 constructor
      */
     public set<T = any>(
         key: string,
         Dependency: new () => IInjection | T,
-        initialise = false
+        initialiseOnRequest = false,
+        // TODO: add here constructor arguments as spread args?
+        ...constructorArgs
     ): void {
         if (this.instantiatedDependencies[key] || this.dependencies[key]) {
             throw new Error(`Injectable with key ${key} already set`);
         }
 
-        this.dependencies[key] = Dependency;
+        if (typeof Dependency === 'undefined') {
+            throw new Error(`Provided dependency has value of undefined`);
+        }
 
-        // if required initialised
-        if (initialise) {
+        this.dependencies[key] = {
+            dependency: Dependency,
+            args: constructorArgs
+        };
+
+        // if required immediate initialisation
+        if (!initialiseOnRequest) {
             this.initialisedDependency<T>(key);
             return;
         }
@@ -47,14 +59,19 @@ export class Syringe implements ISyringe {
      * Retrieve injection by its class / constructor or key
      * @param {{new(): (IInjection | T)} | string} Dependency
      * @returns {T}
+     * @param constructorArgs {...any} Arguments that should be passed to dependency
+     *                                 constructor
      */
-    public get<T = any>(Dependency: (new () => IInjection | T) | string): T {
+    public get<T = any>(
+        Dependency: (new () => IInjection | T) | string,
+        ...constructorArgs
+    ): T {
         if (typeof Dependency === 'string') {
             return this.initialisedDependency<T>(Dependency);
         }
 
         // Allow to retrieve dependency via 'get' using only constructors.
-        if (!Syringe.isConstructor(Dependency)) {
+        if (!Syringe.isConstructor(Dependency) || !Dependency.name) {
             throw new Error(`
                 Provided dependency not an constructor. 
                 To inject primitive values register them using 'set' method first.
@@ -62,9 +79,20 @@ export class Syringe implements ISyringe {
         }
 
         // Use constructor name as key
-        const dependencyKey = Dependency.name;
+        const key = Dependency.name;
 
-        return this.initialisedDependency<T>(dependencyKey);
+        // if not in store add
+        if (
+            !this.dependencies[key] &&
+            !this.initialisedDependency[key]
+        ) {
+            this.dependencies[key] = {
+                dependency: Dependency,
+                args: constructorArgs
+            };
+        }
+
+        return this.initialisedDependency<T>(key);
     }
 
     /**
@@ -73,25 +101,24 @@ export class Syringe implements ISyringe {
      * @param {string} key
      * @returns {T}
      */
-    protected initialisedDependency<T = any>(
-        key: string
-    ): T {
+    protected initialisedDependency<T = any>(key: string): T {
         if (
             !this.dependencies[key] &&
             !this.instantiatedDependencies[key]
         ) {
-            throw new Error(`Injectable with key ${key} not registered`);
+            throw new Error(`Dependency for key ${key} not registered`);
         }
 
         if (this.instantiatedDependencies[key]) {
-            return this.instantiatedDependencies[key];
+            return this.instantiatedDependencies[key].dependency;
         }
 
         // if registered but not initialised do that now
-        const Dependency = this.dependencies[key];
+        const Dependency = this.dependencies[key].dependency;
+        const args = this.dependencies[key].args;
         let dependency;
         if (Syringe.isConstructor(Dependency)) {
-            dependency = new Dependency();
+            dependency = new Dependency(...args);
         } else {
             dependency = Dependency;
         }
@@ -102,7 +129,10 @@ export class Syringe implements ISyringe {
             dependency.init(this);
         }
 
-        this.instantiatedDependencies[key] = dependency;
+        this.instantiatedDependencies[key] = {
+            dependency: dependency,
+            args: args
+        };
         delete this.dependencies[key];
 
         return dependency;

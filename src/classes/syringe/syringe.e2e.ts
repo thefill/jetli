@@ -1,0 +1,2 @@
+xdescribe('Syringe class', () => {
+});
