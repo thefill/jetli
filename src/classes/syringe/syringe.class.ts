@@ -11,11 +11,11 @@ export class Syringe implements ISyringe {
      * @returns {boolean}
      */
     protected static isConstructor(argument) {
-        return typeof argument === 'function' && argument.name;
+        return !!argument.name && typeof argument === 'function';
     }
 
     protected dependencies: { [key: string]: IDependencyConfig } = {};
-    protected instantiatedDependencies: { [key: string]: IDependencyConfig } = {};
+    protected initialisedDependencies: { [key: string]: IDependencyConfig } = {};
 
     /**
      * Register dependency (also primitive values) by key - will be initialised
@@ -30,11 +30,11 @@ export class Syringe implements ISyringe {
     public set<T = any>(
         key: string,
         Dependency: new () => IInjection | T,
-        initialiseOnRequest = false,
+        initialiseOnRequest = true,
         // TODO: add here constructor arguments as spread args?
         ...constructorArgs
     ): void {
-        if (this.instantiatedDependencies[key] || this.dependencies[key]) {
+        if (this.initialisedDependencies[key] || this.dependencies[key]) {
             throw new Error(`Injectable with key ${key} already set`);
         }
 
@@ -49,7 +49,7 @@ export class Syringe implements ISyringe {
 
         // if required immediate initialisation
         if (!initialiseOnRequest) {
-            this.initialisedDependency<T>(key);
+            this.initialiseDependency<T>(key);
             return;
         }
 
@@ -67,7 +67,7 @@ export class Syringe implements ISyringe {
         ...constructorArgs
     ): T {
         if (typeof Dependency === 'string') {
-            return this.initialisedDependency<T>(Dependency);
+            return this.initialiseDependency<T>(Dependency);
         }
 
         // Allow to retrieve dependency via 'get' using only constructors.
@@ -84,7 +84,7 @@ export class Syringe implements ISyringe {
         // if not in store add
         if (
             !this.dependencies[key] &&
-            !this.initialisedDependency[key]
+            !this.initialiseDependency[key]
         ) {
             this.dependencies[key] = {
                 dependency: Dependency,
@@ -92,7 +92,7 @@ export class Syringe implements ISyringe {
             };
         }
 
-        return this.initialisedDependency<T>(key);
+        return this.initialiseDependency<T>(key);
     }
 
     /**
@@ -101,16 +101,16 @@ export class Syringe implements ISyringe {
      * @param {string} key
      * @returns {T}
      */
-    protected initialisedDependency<T = any>(key: string): T {
+    protected initialiseDependency<T = any>(key: string): T {
         if (
             !this.dependencies[key] &&
-            !this.instantiatedDependencies[key]
+            !this.initialisedDependencies[key]
         ) {
             throw new Error(`Dependency for key ${key} not registered`);
         }
 
-        if (this.instantiatedDependencies[key]) {
-            return this.instantiatedDependencies[key].dependency;
+        if (this.initialisedDependencies[key]) {
+            return this.initialisedDependencies[key].dependency;
         }
 
         // if registered but not initialised do that now
@@ -129,7 +129,7 @@ export class Syringe implements ISyringe {
             dependency.init(this);
         }
 
-        this.instantiatedDependencies[key] = {
+        this.initialisedDependencies[key] = {
             dependency: dependency,
             args: args
         };
