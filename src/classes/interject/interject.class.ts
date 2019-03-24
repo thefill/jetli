@@ -1,9 +1,9 @@
-import {IDependencyConfig, IInjection, ISyringe} from '../../interfaces';
+import {IDependencyConfig, IInjection, IInterject} from '../../interfaces';
 
 /**
  * Main class for dependency injector.
  */
-export class Syringe implements ISyringe {
+export class Interject implements IInterject {
 
     /**
      * Check if provided argument is an constructor
@@ -22,7 +22,7 @@ export class Syringe implements ISyringe {
      * immediately if initialise set to true.
      * @param {string} key
      * @param {{new(): (IInjection | T)}} Dependency
-     * @param {boolean} initialiseOnRequest Should Syringe initialise immediately,
+     * @param {boolean} initialiseOnRequest Should Interject initialise immediately,
      *                                          or delay till injection requested
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
@@ -31,7 +31,6 @@ export class Syringe implements ISyringe {
         key: string,
         Dependency: new () => IInjection | T,
         initialiseOnRequest = true,
-        // TODO: add here constructor arguments as spread args?
         ...constructorArgs
     ): void {
         if (this.initialisedDependencies[key] || this.dependencies[key]) {
@@ -71,7 +70,7 @@ export class Syringe implements ISyringe {
         }
 
         // Allow to retrieve dependency via 'get' using only constructors.
-        if (!Syringe.isConstructor(Dependency) || !Dependency.name) {
+        if (!Interject.isConstructor(Dependency) || !Dependency.name) {
             throw new Error(`
                 Provided dependency not an constructor. 
                 To inject primitive values register them using 'set' method first.
@@ -117,7 +116,7 @@ export class Syringe implements ISyringe {
         const Dependency = this.dependencies[key].dependency;
         const args = this.dependencies[key].args;
         let dependency;
-        if (Syringe.isConstructor(Dependency)) {
+        if (Interject.isConstructor(Dependency)) {
             dependency = new Dependency(...args);
         } else {
             dependency = Dependency;

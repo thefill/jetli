@@ -12,7 +12,7 @@
 //
 
 // Create injection constructor mock
-import {Syringe} from './syringe.class';
+import {Interject} from './interject.class';
 import {IInjection} from '../../interfaces/injection';
 import Mock = jest.Mock;
 
@@ -92,11 +92,11 @@ const invalidDependencyIdentificators = {
     }
 };
 
-describe('Syringe class', () => {
-    let syringe: Syringe;
+describe('Interject class', () => {
+    let interject: Interject;
 
     beforeEach(() => {
-        syringe = new Syringe();
+        interject = new Interject();
         stubbedConstructorTypes.class.mockReset();
         stubbedConstructorTypes.injection.mockReset();
         stubbedConstructorTypes.function.mockReset();
@@ -106,8 +106,8 @@ describe('Syringe class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = primitiveTypes[typeName];
-                syringe.set(typeName, dependency);
-                const retrievedDependency = syringe.get(typeName);
+                interject.set(typeName, dependency);
+                const retrievedDependency = interject.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
@@ -115,8 +115,8 @@ describe('Syringe class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = constructorTypes[typeName];
-                syringe.set(typeName, dependency);
-                const retrievedDependency = syringe.get(typeName);
+                interject.set(typeName, dependency);
+                const retrievedDependency = interject.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -129,10 +129,10 @@ describe('Syringe class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = primitiveTypes[typeName];
-                syringe.set(typeName, dependency);
+                interject.set(typeName, dependency);
 
                 try {
-                    syringe.set(typeName, dependency);
+                    interject.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -141,10 +141,10 @@ describe('Syringe class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = constructorTypes[typeName];
-                syringe.set(typeName, dependency);
+                interject.set(typeName, dependency);
 
                 try {
-                    syringe.set(typeName, dependency);
+                    interject.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -156,7 +156,7 @@ describe('Syringe class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                syringe.set(typeName, dependency);
+                interject.set(typeName, dependency);
 
                 expect(dependency).not.toBeCalled();
             });
@@ -167,7 +167,7 @@ describe('Syringe class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                syringe.set(typeName, dependency, false);
+                interject.set(typeName, dependency, false);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -178,10 +178,10 @@ describe('Syringe class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                syringe.set(typeName, dependency, false);
-                syringe.get(typeName);
-                syringe.get(typeName);
-                syringe.get(typeName);
+                interject.set(typeName, dependency, false);
+                interject.get(typeName);
+                interject.get(typeName);
+                interject.get(typeName);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -195,7 +195,7 @@ describe('Syringe class', () => {
                 const argument2 = 123;
                 const argument3 = [1, 2, 3];
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                syringe.set(typeName, dependency, false, argument1, argument2, argument3);
+                interject.set(typeName, dependency, false, argument1, argument2, argument3);
 
                 expect(dependency).toBeCalledWith(argument1, argument2, argument3);
             });
@@ -206,8 +206,8 @@ describe('Syringe class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = primitiveTypes[typeName];
-                syringe.set(typeName, dependency);
-                const retrievedDependency = syringe.get(typeName);
+                interject.set(typeName, dependency);
+                const retrievedDependency = interject.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
@@ -215,8 +215,8 @@ describe('Syringe class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = constructorTypes[typeName];
-                syringe.set(typeName, dependency);
-                const retrievedDependency = syringe.get(typeName);
+                interject.set(typeName, dependency);
+                const retrievedDependency = interject.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -229,7 +229,7 @@ describe('Syringe class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = constructorTypes[typeName];
-                const retrievedDependency = syringe.get(dependency);
+                const retrievedDependency = interject.get(dependency);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -244,7 +244,7 @@ describe('Syringe class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    syringe.get(typeName);
+                    interject.get(typeName);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -255,7 +255,7 @@ describe('Syringe class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    syringe.get(dependency);
+                    interject.get(dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -269,7 +269,7 @@ describe('Syringe class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    syringe.set('someType', dependency);
+                    interject.set('someType', dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -283,7 +283,7 @@ describe('Syringe class', () => {
                 const identificator = invalidDependencyIdentificators[typeName];
 
                 try {
-                    syringe.get(identificator);
+                    interject.get(identificator);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -296,10 +296,10 @@ describe('Syringe class', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    syringe.set(typeName, dependency);
+                    interject.set(typeName, dependency);
                     expect(dependency).not.toBeCalled();
 
-                    syringe.get(typeName);
+                    interject.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -309,24 +309,23 @@ describe('Syringe class', () => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    syringe.get(dependency);
+                    interject.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
         });
     });
 
-
     describe('should initialise constructor once via get method', () => {
         describe('for string key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    syringe.set(typeName, dependency);
+                    interject.set(typeName, dependency);
 
-                    syringe.get(typeName);
-                    syringe.get(typeName);
-                    syringe.get(typeName);
+                    interject.get(typeName);
+                    interject.get(typeName);
+                    interject.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -336,9 +335,9 @@ describe('Syringe class', () => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    syringe.get(dependency);
-                    syringe.get(dependency);
-                    syringe.get(dependency);
+                    interject.get(dependency);
+                    interject.get(dependency);
+                    interject.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -353,8 +352,8 @@ describe('Syringe class', () => {
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    syringe.set(typeName, dependency, true, argument1, argument2, argument3);
-                    syringe.get(typeName);
+                    interject.set(typeName, dependency, true, argument1, argument2, argument3);
+                    interject.get(typeName);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });
@@ -367,7 +366,7 @@ describe('Syringe class', () => {
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    syringe.get(dependency, argument1, argument2, argument3);
+                    interject.get(dependency, argument1, argument2, argument3);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });

@@ -1,8 +1,8 @@
-import {ISyringe} from '../syringe';
+import {IInterject} from '../interject';
 
 /**
- * Interface to which should adhere if they want to be initialised by Syringe
+ * Interface to which should adhere if they want to be initialised by Interject
  */
 export interface IInjection {
-    init: (syringe: ISyringe) => void;
+    init: (interject: IInterject) => void;
 }

@@ -1,3 +1,3 @@
 export * from './injection';
 export * from './dependency-config';
-export * from './syringe';
+export * from './interject';

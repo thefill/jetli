@@ -1,5 +1,5 @@
 {
-    "name": "syringe",
+    "name": "interject",
     "version": "0.0.1",
     "description": "Dependency injector",
     "main": "dist/cjs/index.js",
@@ -60,7 +60,7 @@
     "author": "Filip Dabrowski & Javascript Ltd.",
     "repository": {
         "type": "git",
-        "url": "git@github.com:thefill/syringe.git"
+        "url": "git@github.com:thefill/interject.git"
     },
     "license": "MIT"
 }

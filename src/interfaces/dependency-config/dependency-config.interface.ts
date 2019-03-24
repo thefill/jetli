@@ -1,9 +1,9 @@
-import {ISyringe} from '../syringe';
+import {IInterject} from '../interject';
 
 /**
- * Interface for internal syringe dependency config store
+ * Interface for internal interject dependency config store
  */
 export interface IDependencyConfig {
-    dependency: ISyringe | any;
+    dependency: IInterject | any;
     args: any[];
 }

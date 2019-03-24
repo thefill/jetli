@@ -1,1 +1,1 @@
-export * from './syringe';
+export * from './interject';
