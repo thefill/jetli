@@ -57,7 +57,7 @@
     "engines": {
         "node": ">=6.11.5"
     },
-    "author": "Filip Dabrowski & Javascript Ltd.",
+    "author": "Filip Dabrowski",
     "repository": {
         "type": "git",
         "url": "git@github.com:thefill/interject.git"
