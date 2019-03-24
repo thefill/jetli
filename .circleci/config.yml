@@ -2,7 +2,7 @@ version: 2
 jobs:
     build:
         docker:
-            - image: mhart/node-alpine:6.17.0
+            - image: mhart/alpine-node:6.17.0
 
         working_directory: ~/interject
 
