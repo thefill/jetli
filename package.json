@@ -12,7 +12,7 @@
         "build:esm": "tsc -p tsconfig.esm.json",
         "build:cjs": "tsc -p tsconfig.cjs.json",
         "// CODE QUALITY SCRIPTS //": "----------------------------------------------",
-        "lint": "tslint -c tslint.json src/*.ts",
+        "lint": "tslint -c tslint.json src/**/*.ts",
         "test": "jest --config jest-unit.config.json",
         "e2e": "jest --config jest-e2e.config.json",
         "test:watch": "jest --config jest-unit.config.json --watch",
