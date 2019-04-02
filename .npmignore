@@ -1,4 +1,7 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
+# intermediate code
+src/
+README.html
+TODO.md
 
 # dependencies
 node_modules/
@@ -8,8 +11,6 @@ coverage/
 
 # production
 build/
-dist/
-**/dist/
 cache/
 .cache
 
@@ -24,3 +25,16 @@ cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# configs
+.editorconfig
+.huskyrc
+.nvmrc
+.stylelintrc
+jest-e2e.config.json
+jest-unit.config.json
+tsconfig.cjs.json
+tsconfig.esm.json
+tsconfig.json
+tslint.json
+.circleci/
