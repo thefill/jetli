@@ -52,7 +52,7 @@
         "tslint": "5.14.0",
         "typedoc": "0.14.2",
         "typescript": "3.3.4000",
-        "typedoc-plugin-markdown": "1.1.27"
+        "typedoc-plugin-markdown": "1.2.0"
     },
     "engines": {
         "node": ">=6.11.5"
