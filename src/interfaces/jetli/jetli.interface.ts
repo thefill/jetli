@@ -3,7 +3,7 @@ import {IInjection} from '../injection';
 /**
  * Interface for the dependency injector.
  */
-export interface IInterject {
+export interface IJetli {
     set: <T = any>(
         key: string,
         Dependency: new () => IInjection | T,

@@ -1,9 +1,9 @@
-import {IDependencyConfig, IInjection, IInterject} from '../../interfaces';
+import {IDependencyConfig, IInjection, IJetli} from '../../interfaces';
 
 /**
  * Main class for dependency injector.
  */
-export class Interject implements IInterject {
+export class Jetli implements IJetli {
 
     /**
      * Check if provided argument is an constructor
@@ -22,7 +22,7 @@ export class Interject implements IInterject {
      * immediately if initialise set to true.
      * @param {string} key
      * @param {{new(): (IInjection | T)}} Dependency
-     * @param {boolean} initialiseOnRequest Should Interject initialise immediately,
+     * @param {boolean} initialiseOnRequest Should Jetli initialise immediately,
      *                                          or delay till injection requested
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
@@ -70,7 +70,7 @@ export class Interject implements IInterject {
         }
 
         // Allow to retrieve dependency via 'get' using only constructors.
-        if (!Interject.isConstructor(Dependency) || !Dependency.name) {
+        if (!Jetli.isConstructor(Dependency) || !Dependency.name) {
             throw new Error(`
                 Provided dependency not an constructor. 
                 To inject primitive values register them using 'set' method first.
@@ -116,7 +116,7 @@ export class Interject implements IInterject {
         const Dependency = this.dependencies[key].dependency;
         const args = this.dependencies[key].args;
         let dependency;
-        if (Interject.isConstructor(Dependency)) {
+        if (Jetli.isConstructor(Dependency)) {
             dependency = new Dependency(...args);
         } else {
             dependency = Dependency;

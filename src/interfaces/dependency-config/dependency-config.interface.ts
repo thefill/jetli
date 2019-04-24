@@ -1,9 +1,9 @@
-import {IInterject} from '../interject';
+import {IJetli} from '../jetli';
 
 /**
- * Interface for internal interject dependency config store
+ * Interface for internal jetli dependency config store
  */
 export interface IDependencyConfig {
-    dependency: IInterject | any;
+    dependency: IJetli | any;
     args: any[];
 }

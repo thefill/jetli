@@ -1,18 +1,5 @@
-//
-// public set<T = any>(
-//     key: string,
-//     Dependency: new () => IInjection | T,
-//     initialiseOnRequest = false,
-//         ...args
-// ): void {
-// public get<T = any>(Dependency: (
-//      new () => IInjection | T) | string,
-// ...args
-// ): T {
-//
-
 // Create injection constructor mock
-import {Interject} from './interject.class';
+import {Jetli} from './jetli.class';
 import {IInjection} from '../../interfaces/injection';
 import Mock = jest.Mock;
 
@@ -92,11 +79,11 @@ const invalidDependencyIdentificators = {
     }
 };
 
-describe('Interject class', () => {
-    let interject: Interject;
+describe('Jetli class', () => {
+    let interject: Jetli;
 
     beforeEach(() => {
-        interject = new Interject();
+        interject = new Jetli();
         stubbedConstructorTypes.class.mockReset();
         stubbedConstructorTypes.injection.mockReset();
         stubbedConstructorTypes.function.mockReset();

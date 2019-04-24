@@ -4,7 +4,7 @@ jobs:
         docker:
             - image: mhart/alpine-node:6.17.0
 
-        working_directory: ~/interject
+        working_directory: ~/jetli
 
         steps:
             - checkout
@@ -48,7 +48,7 @@ jobs:
 #    deploy-stage:
 #        docker:
 #            - image: ubuntu:14.04
-#        working_directory: /tmp/interject
+#        working_directory: /tmp/jetli
 #        steps:
 #            - run:
 #                  name: Deploy if tests pass and branch is Staging
@@ -57,7 +57,7 @@ jobs:
 #    deploy-prod:
 #        docker:
 #            - image: ubuntu:14.04
-#        working_directory: /tmp/interject
+#        working_directory: /tmp/jetli
 #        steps:
 #            - run:
 #                  name: Deploy if tests pass and branch is Master
