@@ -19,8 +19,8 @@
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
         "docs": "run-s docs:html docs:md",
-        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
-        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --theme markdown --mdEngine github --out / src",
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme src/docs/README.html --out docs src",
+        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme src/docs/README.html --theme markdown --mdEngine github --out docs src",
         "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage"
     },
     "watch": {
