@@ -7,9 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <script src="https://embed.runkit.com"
-            data-element-id="typekit-container"
-    ></script>
+    <script src="https://embed.runkit.com"></script>
 </head>
 <body>
 
@@ -83,7 +81,7 @@
 
     <h3>Inject & instantiate class via 'get' method</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         const jetli = require('jetli@0.0.2');
 
         class Attack {
@@ -105,7 +103,7 @@
 
     <h3>Inject & instantiate class via 'set' and retrieve instance via 'get' methods</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         const jetli = require('jetli@0.0.2');
 
         class Attack {
@@ -128,7 +126,7 @@
 
     <h3>Inject & instantiate class via 'set' method and unique id &amp; retrieve instance via 'get' methods</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         const jetli = require('jetli@0.0.2');
 
         class Attack {
@@ -151,7 +149,7 @@
 
     <h3>Inject primitives via id</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         const jetli = require('jetli@0.0.2');
 
         const someNumber = 123;
@@ -175,7 +173,7 @@
 
     <h3>Create initialisation-friendly services</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         const jetli = require('jetli@0.0.2');
 
         jetli.set('someNumber', 123);
@@ -202,34 +200,42 @@
 
     <h3>Pass arguments to services constructor</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container"></pre>
+    <pre class="runkit-container"></pre>
 
     <h3>Inject services into other services without circular dependency</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         <!-- TODO: provide code -->
     </pre>
 
     <h3>Delay initialisation of services until used (injection request)</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         <!-- TODO: provide code -->
     </pre>
 
     <h3>Swap services for specific classes</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         <!-- TODO: provide code -->
     </pre>
 
     <h3>Mock services for test purposes</h3>
     <!-- TODO: explain why -->
-    <pre id="typekit-container">
+    <pre class="runkit-container">
         <!-- TODO: provide code -->
     </pre>
 
     <h2 id="documentation">Documentation</h2>
     <p>You can find full documentation <a href="todo">here</a></p>
 
+    <script>
+        const runkitContainers = document.getElementsByClassName('runkit-container');
+        Array.from(runkitContainers).forEach((node) => {
+            const source = node.innerText;
+            node.innerText = '';
+            RunKit.createNotebook({element: node, source: source});
+        });
+    </script>
 </body>
 </html>

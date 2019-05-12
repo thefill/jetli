@@ -18,9 +18,10 @@
         "test:watch": "jest --config jest-unit.config.json --watch",
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
-        "docs": "run-s docs:html docs:md",
-        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme src/docs/README.html --out docs src",
-        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme src/docs/README.html --theme markdown --mdEngine github --out docs src",
+        "docs": "run-s docs:readme docs:html docs:md",
+        "docs:readme": "showdown makehtml -i README2.md -a -o README.html && concat -o README.html ./src/docs/readme_header.html README.html ./src/docs/readme_footer.html",
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
+        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --theme markdown --mdEngine github --out docs src",
         "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage"
     },
     "watch": {
@@ -47,6 +48,8 @@
         "tslint": "5.16.0",
         "typedoc": "0.14.2",
         "typescript": "3.4.5",
+        "concat": "1.0.3",
+        "showdown": "1.9.0",
         "typedoc-plugin-markdown": "1.2.0"
     },
     "engines": {
