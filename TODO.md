@@ -8,7 +8,6 @@
       html on the fly before "npm run docs:html"
     - use showdown extension to replace pre with typekit element e.g. <div id="my-element">
     - generate html page
-- publish gh page with docs, md, coverage & badges
 - add shields https://shields.io/ for: issues open, node version, dependencies: 0, types: typescript
 - add coverage threshold config for jest:
   > "coverageThreshold": {
