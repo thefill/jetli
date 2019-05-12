@@ -58,7 +58,7 @@
     "author": "Filip Dabrowski",
     "repository": {
         "type": "git",
-        "url": "git@github.com:thefill/interject.git"
+        "url": "git@github.com:thefill/jetli.git"
     },
     "license": "MIT"
 }

@@ -49,13 +49,13 @@
             <a href="#installation" title="Installation">Installation</a>
         </li>
         <li>
-            <a href="#basic-usage" title="Basic usage">Basic usage</a>
+            <a href="#basicusage" title="Basic usage">Basic usage</a>
         </li>
         <li>
-            <a href="#advanced-usage" title="Advanced usage">Advanced usage</a>
+            <a href="#advancedusage" title="Advanced usage">Advanced usage</a>
         </li>
         <li>
-            <a href="#documentation" title="Documentation">Documentation</a>
+            <a href="#documentation" title="Documentation">API documentation</a>
         </li>
     </ul>
 
@@ -73,7 +73,7 @@
         pnpm --save jetli
     </pre>
 
-    <h2 id="basic-usage">Usage (basic)</h2>
+    <h2 id="basicusage">Basic usage</h2>
     <p>
         Jetli allows you to inject consistently classes, functions and primitives
         across whole application.
@@ -115,33 +115,10 @@
                 console.log(`Attack no. ${this.id} executed!`);
             }
         }
-        jetli.set(Attack);
+        jetli.set('attack', Attack);
 
-        const fighter1 = jetli.get(Attack);
-        const fighter2 = jetli.get(Attack);
-
-        fighter1.punch();
-        fighter2.punch();
-    </pre>
-
-    <h3>Inject & instantiate class via 'set' method and unique id &amp; retrieve instance via 'get' methods</h3>
-    <!-- TODO: explain why -->
-    <pre class="runkit-container">
-        const jetli = require('jetli@0.0.2');
-
-        class Attack {
-            constructor(){
-                this.id = Math.round();
-                console.log(`Attack no. ${this.id} ready!`);
-            }
-            punch(){
-                console.log(`Attack no. ${this.id} executed!`);
-            }
-        }
-        jetli.set('fighter', Attack);
-
-        const fighter1 = jetli.get('fighter');
-        const fighter2 = jetli.get('fighter');
+        const fighter1 = jetli.get('attack');
+        const fighter2 = jetli.get('attack');
 
         fighter1.punch();
         fighter2.punch();
@@ -196,34 +173,136 @@
         fighter2.punch();
     </pre>
 
-    <h2 id="advanced-usage">Usage (Advanced)</h2>
+    <h2 id="advancedusage">Advanced usage</h2>
+
+    <h3>Delay initialisation of services until used (on injection request)</h3>
+    <!-- TODO: explain why -->
+    <pre class="runkit-container">
+        const jetli = require('jetli@0.0.2');
+
+        class Attack {
+            constructor(){
+                this.id = Math.round();
+                console.log(`Attack no. ${this.id} ready!`);
+            }
+            punch(){
+                console.log(`Attack no. ${this.id} executed!`);
+            }
+        }
+
+        jetli.set('attack', Attack, false);
+        console.log('No initialisation at this point');
+
+        const fighter1 = jetli.get('attack');
+        const fighter2 = jetli.get('attack');
+
+        fighter1.punch();
+        fighter2.punch();
+    </pre>
 
     <h3>Pass arguments to services constructor</h3>
     <!-- TODO: explain why -->
-    <pre class="runkit-container"></pre>
+    <pre class="runkit-container">
+        const jetli = require('jetli@0.0.2');
+
+        class Attack {
+            constructor(id){
+                this.id = id;
+                console.log(`Attack no. ${this.id} ready!`);
+            }
+            punch(){
+                console.log(`Attack no. ${this.id} executed!`);
+            }
+        }
+        const externalId = Math.round();
+        jetli.set('attack', Attack, false, externalId);
+
+        const fighter1 = jetli.get('attack');
+        const fighter2 = jetli.get('attack');
+
+        fighter1.punch();
+        fighter2.punch();
+    </pre>
 
     <h3>Inject services into other services without circular dependency</h3>
     <!-- TODO: explain why -->
     <pre class="runkit-container">
-        <!-- TODO: provide code -->
-    </pre>
+        const jetli = require('jetli@0.0.2');
 
-    <h3>Delay initialisation of services until used (injection request)</h3>
-    <!-- TODO: explain why -->
-    <pre class="runkit-container">
-        <!-- TODO: provide code -->
-    </pre>
+        class ServiceA {
+            init(jetli){
+                this.service = jetli.get(ServiceB);
+                this.id = this.service.getNumber();
+            }
 
-    <h3>Swap services for specific classes</h3>
-    <!-- TODO: explain why -->
-    <pre class="runkit-container">
-        <!-- TODO: provide code -->
+            getNumber(){
+                return 123;
+            }
+
+            getId(){
+                return this.id;
+            }
+        }
+
+        class ServiceB {
+            init(jetli){
+                this.service = jetli.get(ServiceA);
+                this.id = this.service.getNumber();
+            }
+
+            getNumber(){
+                return 456;
+            }
+
+            getId(){
+                return this.id;
+            }
+        }
+
+        const serviceA = jetli.get(ServiceA);
+        const serviceB = jetli.get(ServiceB);
+
+        serviceA.getId();
+        serviceB.getId();
     </pre>
 
     <h3>Mock services for test purposes</h3>
     <!-- TODO: explain why -->
     <pre class="runkit-container">
-        <!-- TODO: provide code -->
+        const jetli = require('jetli@0.0.2');
+
+        class Attack {
+            constructor(){
+                this.id = Math.round();
+                console.log(`Attack no. ${this.id} ready!`);
+            }
+            punch(){
+                console.log(`Attack no. ${this.id} executed!`);
+            }
+        }
+
+        class AttackMock {
+            constructor(){
+                super();
+                console.log(`Attack mocked!`);
+            }
+            punch(){
+                super.punch();
+                console.log(`Mocked attack execution!`);
+            }
+        }
+
+        // somewhere in your code
+        jetli.set('attack', Attack);
+        const fighter1 = jetli.get('attack');
+        fighter1.punch();
+
+        // somewhere in your test
+        jetli.unset('attack');
+        jetli.set('attack', AttackMock);
+        const fighter2 = jetli.get('attack');
+        fighter2.punch();
+
     </pre>
 
     <h2 id="documentation">Documentation</h2>

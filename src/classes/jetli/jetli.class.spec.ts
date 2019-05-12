@@ -80,10 +80,10 @@ const invalidDependencyIdentificators = {
 };
 
 describe('Jetli class', () => {
-    let interject: Jetli;
+    let jetli: Jetli;
 
     beforeEach(() => {
-        interject = new Jetli();
+        jetli = new Jetli();
         stubbedConstructorTypes.class.mockReset();
         stubbedConstructorTypes.injection.mockReset();
         stubbedConstructorTypes.function.mockReset();
@@ -93,8 +93,8 @@ describe('Jetli class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = primitiveTypes[typeName];
-                interject.set(typeName, dependency);
-                const retrievedDependency = interject.get(typeName);
+                jetli.set(typeName, dependency);
+                const retrievedDependency = jetli.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
@@ -102,8 +102,8 @@ describe('Jetli class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = constructorTypes[typeName];
-                interject.set(typeName, dependency);
-                const retrievedDependency = interject.get(typeName);
+                jetli.set(typeName, dependency);
+                const retrievedDependency = jetli.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -116,10 +116,10 @@ describe('Jetli class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = primitiveTypes[typeName];
-                interject.set(typeName, dependency);
+                jetli.set(typeName, dependency);
 
                 try {
-                    interject.set(typeName, dependency);
+                    jetli.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -128,10 +128,10 @@ describe('Jetli class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(typeName, () => {
                 const dependency = constructorTypes[typeName];
-                interject.set(typeName, dependency);
+                jetli.set(typeName, dependency);
 
                 try {
-                    interject.set(typeName, dependency);
+                    jetli.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -143,7 +143,7 @@ describe('Jetli class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                interject.set(typeName, dependency);
+                jetli.set(typeName, dependency);
 
                 expect(dependency).not.toBeCalled();
             });
@@ -154,7 +154,7 @@ describe('Jetli class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                interject.set(typeName, dependency, false);
+                jetli.set(typeName, dependency, false);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -165,10 +165,10 @@ describe('Jetli class', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                interject.set(typeName, dependency, false);
-                interject.get(typeName);
-                interject.get(typeName);
-                interject.get(typeName);
+                jetli.set(typeName, dependency, false);
+                jetli.get(typeName);
+                jetli.get(typeName);
+                jetli.get(typeName);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -182,7 +182,7 @@ describe('Jetli class', () => {
                 const argument2 = 123;
                 const argument3 = [1, 2, 3];
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                interject.set(typeName, dependency, false, argument1, argument2, argument3);
+                jetli.set(typeName, dependency, false, argument1, argument2, argument3);
 
                 expect(dependency).toBeCalledWith(argument1, argument2, argument3);
             });
@@ -193,8 +193,8 @@ describe('Jetli class', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = primitiveTypes[typeName];
-                interject.set(typeName, dependency);
-                const retrievedDependency = interject.get(typeName);
+                jetli.set(typeName, dependency);
+                const retrievedDependency = jetli.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
@@ -202,8 +202,8 @@ describe('Jetli class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = constructorTypes[typeName];
-                interject.set(typeName, dependency);
-                const retrievedDependency = interject.get(typeName);
+                jetli.set(typeName, dependency);
+                const retrievedDependency = jetli.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -216,11 +216,43 @@ describe('Jetli class', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
                 const dependency = constructorTypes[typeName];
-                const retrievedDependency = interject.get(dependency);
+                const retrievedDependency = jetli.get(dependency);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
                 expect(retrievedDependency).toEqual(expectedDerivative);
+            });
+        });
+    });
+
+    describe('should unset dependency', () => {
+        it(`for string key`, () => {
+            Object.keys(constructorTypes).forEach((typeName) => {
+                const dependency = constructorTypes[typeName];
+                jetli.set(typeName, dependency);
+                jetli.unset(typeName);
+
+                try {
+                    jetli.get(typeName);
+                } catch (error) {
+                    expect(error).toBeTruthy();
+                }
+            });
+        });
+    });
+
+    describe('should throw error for requesting unset dependency via get method', () => {
+        it(`for string key`, () => {
+            Object.keys(constructorTypes).forEach((typeName) => {
+                const dependency = constructorTypes[typeName];
+                jetli.set(typeName, dependency);
+                jetli.unset(typeName);
+
+                try {
+                    jetli.get(typeName);
+                } catch (error) {
+                    expect(error).toBeTruthy();
+                }
             });
         });
     });
@@ -231,7 +263,7 @@ describe('Jetli class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    interject.get(typeName);
+                    jetli.get(typeName);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -242,7 +274,7 @@ describe('Jetli class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    interject.get(dependency);
+                    jetli.get(dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -256,7 +288,7 @@ describe('Jetli class', () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    interject.set('someType', dependency);
+                    jetli.set('someType', dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -270,7 +302,7 @@ describe('Jetli class', () => {
                 const identificator = invalidDependencyIdentificators[typeName];
 
                 try {
-                    interject.get(identificator);
+                    jetli.get(identificator);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -283,10 +315,10 @@ describe('Jetli class', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    interject.set(typeName, dependency);
+                    jetli.set(typeName, dependency);
                     expect(dependency).not.toBeCalled();
 
-                    interject.get(typeName);
+                    jetli.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -296,7 +328,7 @@ describe('Jetli class', () => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    interject.get(dependency);
+                    jetli.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -308,11 +340,11 @@ describe('Jetli class', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    interject.set(typeName, dependency);
+                    jetli.set(typeName, dependency);
 
-                    interject.get(typeName);
-                    interject.get(typeName);
-                    interject.get(typeName);
+                    jetli.get(typeName);
+                    jetli.get(typeName);
+                    jetli.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -322,9 +354,9 @@ describe('Jetli class', () => {
                 it(`for ${typeName}`, () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    interject.get(dependency);
-                    interject.get(dependency);
-                    interject.get(dependency);
+                    jetli.get(dependency);
+                    jetli.get(dependency);
+                    jetli.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -339,8 +371,8 @@ describe('Jetli class', () => {
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    interject.set(typeName, dependency, true, argument1, argument2, argument3);
-                    interject.get(typeName);
+                    jetli.set(typeName, dependency, true, argument1, argument2, argument3);
+                    jetli.get(typeName);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });
@@ -353,7 +385,7 @@ describe('Jetli class', () => {
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    interject.get(dependency, argument1, argument2, argument3);
+                    jetli.get(dependency, argument1, argument2, argument3);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });

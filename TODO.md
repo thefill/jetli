@@ -3,11 +3,9 @@
 - set CI with circle-ci
 - integrate generation of docs to CI
 - replace root README.md 
-    - add there converted to markdown content of src/doc/MARKDOWN.html
-    - use https://github.com/showdownjs/showdown/wiki/CLI-tool to convert md to 
-      html on the fly before "npm run docs:html"
-    - use showdown extension to replace pre with typekit element e.g. <div id="my-element">
-    - generate html page
+    - convert to markdown content of the src/doc/MARKDOWN.html
+    - use "npm run docs:readme" to generate README.html
+    - combine with api docs
 - add shields https://shields.io/ for: issues open, node version, dependencies: 0, types: typescript
 - add coverage threshold config for jest:
   > "coverageThreshold": {
