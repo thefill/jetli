@@ -32,7 +32,8 @@ jobs:
             - run:
                   name: Publish test coverage
                   command: |
-                      npm run publish:coverage
+                      npm run publish:coverage &&
+                      echo $TEST_ENV_VAR
 
             - run:
                   name: Clean
