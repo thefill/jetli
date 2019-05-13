@@ -11,7 +11,12 @@
 </head>
 <body>
 
-<p><a href="https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176" alt="Codacy Badge" /> </a> <a href="https://greenkeeper.io/"> <img src="https://badges.greenkeeper.io/thefill/jetli.svg" alt="Greenkeeper badge" /> </a> <a href="https://circleci.com/gh/thefill/jetli"> <img src="https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield" alt="CricleCi badge" /> </a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a> </p>
+<p><a href="https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176" alt="Codacy Badge" /> </a> 
+<a href="https://github.com/thefill/jetli/issues"><img src="https://img.shields.io/github/issues-raw/thefill/jetli.svg" alt="Open issues" /></a>
+<a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/thefill/jetli.svg" alt="Greenkeeper badge" /> </a>
+<a href="https://circleci.com/gh/thefill/jetli"><img src="https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield" alt="CricleCi badge" /> </a>
+<a href="https://github.com/thefill/jetli"><img src="https://img.shields.io/npm/types/jetli.svg" alt="Types: TypeScript" /></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a></p>
 <h1 id="jetli">Jetli</h1>
 <p>Simple, light dependency injector - supports factories, classes and primitives.</p>
 <h2 id="mainfeatures">Main features:</h2>
@@ -228,17 +233,18 @@ class AttackMock {
 
 // somewhere in your code
 jetli.set('attack', Attack);
+
 const fighter1 = jetli.get('attack');
 fighter1.punch();
 
 // somewhere in your test
 jetli.unset('attack');
 jetli.set('attack', AttackMock);
+
 const fighter2 = jetli.get('attack');
 fighter2.punch();</pre>
 <h2 id="documentation">Documentation</h2>
 <p>You can find full documentation <a href="todo">here</a></p>
-<script>const runkitContainers = document.getElementsByClassName('runkit-container'); Array.from(runkitContainers).forEach((node) => { const source = node.innerText; node.innerText = ''; RunKit.createNotebook({element: node, source: source}); });</script>
 <script>
     const runkitContainers = document.getElementsByClassName('runkit-container');
     Array.from(runkitContainers).forEach((node) => {
