@@ -14,6 +14,18 @@ export class Jetli implements IJetli {
         return !!argument.name && typeof argument === 'function';
     }
 
+    /**
+     * Checks if key in store
+     * @param {object} store
+     * @param {string} key
+     * @returns {boolean}
+     */
+    protected static inStore(store: { [key: string]: any }, key: string): boolean {
+        const storeKeys = Object.keys(store);
+
+        return storeKeys.includes(key);
+    }
+
     protected dependencies: { [key: string]: IDependencyConfig } = {};
     protected initialisedDependencies: { [key: string]: IDependencyConfig } = {};
 
@@ -33,7 +45,10 @@ export class Jetli implements IJetli {
         initialiseOnRequest = true,
         ...constructorArgs
     ): void {
-        if (this.initialisedDependencies[key] || this.dependencies[key]) {
+        if (
+            Jetli.inStore(this.dependencies, key) ||
+            Jetli.inStore(this.initialisedDependencies, key)
+        ) {
             throw new Error(`Injectable with key ${key} already set`);
         }
 
@@ -51,7 +66,17 @@ export class Jetli implements IJetli {
             this.initialiseDependency<T>(key);
             return;
         }
+    }
 
+    /**
+     * Unregister dependency (also primitive values) by key
+     * @param {string} key
+     */
+    public unset<T = any>(
+        key: string
+    ): void {
+        delete this.dependencies[key];
+        delete this.initialisedDependencies[key];
     }
 
     /**
@@ -82,8 +107,8 @@ export class Jetli implements IJetli {
 
         // if not in store add
         if (
-            !this.dependencies[key] &&
-            !this.initialiseDependency[key]
+            !Jetli.inStore(this.dependencies, key) &&
+            !Jetli.inStore(this.initialisedDependencies, key)
         ) {
             this.dependencies[key] = {
                 dependency: Dependency,
@@ -102,13 +127,13 @@ export class Jetli implements IJetli {
      */
     protected initialiseDependency<T = any>(key: string): T {
         if (
-            !this.dependencies[key] &&
-            !this.initialisedDependencies[key]
+            !Jetli.inStore(this.dependencies, key) &&
+            !Jetli.inStore(this.initialisedDependencies, key)
         ) {
             throw new Error(`Dependency for key ${key} not registered`);
         }
 
-        if (this.initialisedDependencies[key]) {
+        if (Jetli.inStore(this.initialisedDependencies, key)) {
             return this.initialisedDependencies[key].dependency;
         }
 
