@@ -19,7 +19,7 @@
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
         "docs": "run-s docs:readme docs:html docs:md",
-        "docs:readme": "showdown makehtml -i README2.md -a -o README.html && concat -o README.html ./src/docs/readme_header.html README.html ./src/docs/readme_footer.html",
+        "docs:readme": "showdown makehtml -i README.md -a -o README.html && concat -o README.html ./src/docs-partials/readme_header.html README.html ./src/docs-partials/readme_footer.html",
         "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
         "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --theme markdown --mdEngine github --out docs src",
         "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage"
