@@ -3,8 +3,6 @@
  
   - integrate generation of docs to CI
  
-  - add shields for issues open, dependencies: 0
- 
   - add coverage threshold config for jest:
 
        "coverageThreshold": {
