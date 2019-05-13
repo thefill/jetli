@@ -1,4 +1,9 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176) ](https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Grade) [ ![Greenkeeper badge](https://badges.greenkeeper.io/thefill/jetli.svg) ](https://greenkeeper.io/) [ ![CricleCi badge](https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield) ](https://circleci.com/gh/thefill/jetli) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176) ](https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Grade) 
+[![Open issues](https://img.shields.io/github/issues-raw/thefill/jetli.svg)](https://github.com/thefill/jetli/issues)
+[![Greenkeeper badge](https://badges.greenkeeper.io/thefill/jetli.svg) ](https://greenkeeper.io/)
+[![CricleCi badge](https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield) ](https://circleci.com/gh/thefill/jetli)
+[![Types: TypeScript](https://img.shields.io/npm/types/jetli.svg)](https://github.com/thefill/jetli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Jetli
 
@@ -249,17 +254,17 @@ class AttackMock {
 
 // somewhere in your code
 jetli.set('attack', Attack);
+
 const fighter1 = jetli.get('attack');
 fighter1.punch();
 
 // somewhere in your test
 jetli.unset('attack');
 jetli.set('attack', AttackMock);
+
 const fighter2 = jetli.get('attack');
 fighter2.punch();</pre>
 
 ## Documentation
 
 You can find full documentation [here](todo)
-
-<script>const runkitContainers = document.getElementsByClassName('runkit-container'); Array.from(runkitContainers).forEach((node) => { const source = node.innerText; node.innerText = ''; RunKit.createNotebook({element: node, source: source}); });</script>
