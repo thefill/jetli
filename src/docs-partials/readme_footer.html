@@ -1,0 +1,10 @@
+<script>
+    const runkitContainers = document.getElementsByClassName('runkit-container');
+    Array.from(runkitContainers).forEach((node) => {
+        const source = node.innerText;
+        node.innerText = '';
+        RunKit.createNotebook({element: node, source: source});
+    });
+</script>
+</body>
+</html>

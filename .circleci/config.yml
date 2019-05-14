@@ -18,6 +18,11 @@ jobs:
                   command: npm run lint
 
             - run:
+                  name: Build
+                  command: |
+                      npm run build
+
+            - run:
                   name: Execute unit & E2E tests and check test coverage
                   command: |
                       npm run test &&
@@ -25,12 +30,14 @@ jobs:
                       npm run e2e
 
             - run:
-                  name: Build
+                  name: Publish test coverage
                   command: |
-                      npm run test &&
-                      npm run test:coverage &&
-                      npm run e2e &&
-                      npm run build
+                      npm run publish:coverage
+
+            - run:
+                  name: Clean
+                  command: |
+                      npm run clean
 
 #            # Save artifacts
 #            - store_artifacts:
