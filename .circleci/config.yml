@@ -1,26 +1,42 @@
-version: 2
+version: 2.1
+
+# Default job config used across whole config file
+defaults: &baseJobConfig
+    working_directory: ~/repo
+    docker:
+        - image: mhart/alpine-node:6.17.0
+
 jobs:
-    build:
-        docker:
-            - image: mhart/alpine-node:6.17.0
-
-        working_directory: ~/jetli
-
+    setup:
+        <<: *baseJobConfig
         steps:
             - checkout
 
-            - run:
-                  name: Install dependencies
-                  command: npm install
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-
+
+            - run: npm install
+
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
+    verify:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
 
             - run:
                   name: Lint code
                   command: npm run lint
-
-            - run:
-                  name: Build
-                  command: |
-                      npm run build
 
             - run:
                   name: Execute unit & E2E tests and check test coverage
@@ -33,62 +49,131 @@ jobs:
                   name: Publish test coverage
                   command: |
                       npm run publish:coverage
+    build:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Build
+                  command: |
+                      npm run build
+
+    publish-coverage:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Publish test coverage
+                  command: |
+                      npm run publish:coverage
+
+    publish-documentation:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Build latest docs
+                  command: |
+                      npm run docs
+
+#            TODO: check how
+#            - run:
+#                  name: Publish docs
+#                  command: |
+#                      npm run publish:package
+
+    publish-package:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+#            TODO: check how
+#            - run:
+#                  name: Verify package version against repo tag
+#                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Publish package
+                  command: npm publish
+
+    clean:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
 
             - run:
                   name: Clean
                   command: |
                       npm run clean
 
-#            # Save artifacts
-#            - store_artifacts:
-#                  path: /tmp/artifacts
-#                  destination: build
-#
-#            # Upload test results
-#            - store_test_results:
-#                  path: /tmp/test-reports
-
-#    documentation:
-#       ...
-#    publish:
-#       ...
-#    deploy-stage:
-#        docker:
-#            - image: ubuntu:14.04
-#        working_directory: /tmp/jetli
-#        steps:
-#            - run:
-#                  name: Deploy if tests pass and branch is Staging
-#                  command: ansible-playbook site.yml -i staging
-#
-#    deploy-prod:
-#        docker:
-#            - image: ubuntu:14.04
-#        working_directory: /tmp/jetli
-#        steps:
-#            - run:
-#                  name: Deploy if tests pass and branch is Master
-#                  command: ansible-playbook site.yml -i production
-
 workflows:
     version: 2
-    build-deploy:
+    build-test-publish:
         jobs:
+            - setup:
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          only: master
+            - clean:
+                  requires:
+                      - setup
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
+            - verify:
+                  requires:
+                      - clean
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          only: master
             - build:
+                  requires:
+                      - clean
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          only: master
+            - publish-coverage:
+                  requires:
+                      - verify
+                      - build
                   filters:
                       branches:
-                          ignore:
-                              - develop
-                              - /feature-.*/
-#            - deploy-stage:
-#                  requires:
-#                      - build
-#                  filters:
-#                      branches:
-#                          only: staging
-#            - deploy-prod:
-#                  requires:
-#                      - build
-#                  filters:
-#                      branches:
-#                          only: master
+                          only: master
+            - publish-documentation:
+                  requires:
+                      - verify
+                      - build
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
+            - publish-package:
+                  requires:
+                      - verify
+                      - build
+                  filters:
+                      tags:
+                          only: /^v.*/
+                      branches:
+                          ignore: /.*/
