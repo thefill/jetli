@@ -1,3 +1,3 @@
 # TODO:
 
-  - integrate generation of docs to CI
+ - integrate generation of docs to CI
