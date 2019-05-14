@@ -9,7 +9,7 @@
 
 Simple, light dependency injector - supports factories, classes and primitives.
 
-## Main features:
+## Main features
 
 *   tiny & easy to use: only 2 methods
 *   delayed dependency initialisation
