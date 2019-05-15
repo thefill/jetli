@@ -52,7 +52,7 @@
         "typescript": "3.4.5",
         "concat": "1.0.3",
         "showdown": "1.9.0",
-        "typedoc-plugin-markdown": "1.2.0"
+        "typedoc-plugin-markdown": "1.2.1"
     },
     "engines": {
         "node": ">=6.11.5"
