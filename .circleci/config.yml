@@ -82,11 +82,10 @@ jobs:
                   command: |
                       npm run docs
 
-#            TODO: check how
-#            - run:
-#                  name: Publish docs
-#                  command: |
-#                      npm run publish:package
+            - run:
+                  name: Publish docs
+                  command: |
+                      npm run publish:docs
 
     publish-package:
         <<: *baseJobConfig
@@ -94,10 +93,10 @@ jobs:
             - attach_workspace:
                   at: ~/repo
 
-#            TODO: check how
-#            - run:
-#                  name: Verify package version against repo tag
-#                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            #            TODO: check how
+            #            - run:
+            #                  name: Verify package version against repo tag
+            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
 
             - run:
                   name: Authenticate with registry
