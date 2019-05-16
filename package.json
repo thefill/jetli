@@ -19,11 +19,11 @@
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
         "publish:coverage": "cat ./coverage/lcov.info | codacy-coverage",
-        "docs": "run-s docs:readme docs:html docs:md",
+        "publish:docs": "gh-pages --help",
+        "docs": "run-s docs:readme docs:html",
         "docs:readme": "showdown makehtml -i README.md -a -o README.html && concat -o README.html ./src/docs-partials/readme_header.html README.html ./src/docs-partials/readme_footer.html",
-        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --out docs src",
-        "docs:md": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.html --theme markdown --mdEngine github --out docs src",
-        "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage"
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.md --out docs/$npm_package_version src",
+        "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage && rimraf .cache"
     },
     "watch": {
         "build": {
@@ -52,7 +52,7 @@
         "typescript": "3.4.5",
         "concat": "1.0.3",
         "showdown": "1.9.0",
-        "typedoc-plugin-markdown": "1.2.0"
+        "gh-pages": "2.0.1"
     },
     "engines": {
         "node": ">=6.11.5"
