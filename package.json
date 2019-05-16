@@ -20,10 +20,13 @@
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
         "publish:coverage": "cat ./coverage/lcov.info | codacy-coverage",
         "publish:docs": "gh-pages --help",
-        "docs": "run-s docs:readme docs:html",
-        "docs:readme": "showdown makehtml -i README.md -a -o README.html && concat -o README.html ./src/docs-partials/readme_header.html README.html ./src/docs-partials/readme_footer.html",
-        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme README.md --out docs/$npm_package_version src",
-        "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage && rimraf .cache"
+        "docs": "run-s docs:base-readme docs:markdown-readme docs:api-readme docs:html docs:postprocess",
+        "docs:base-readme": "concat -o BASE-README.md src/docs-partials/readme.header.md src/docs-partials/readme.badges.md src/docs-partials/readme.body.md",
+        "docs:markdown-readme": "concat -o README.md BASE-README.md src/docs-partials/readme.markdown-documentation.md",
+        "docs:api-readme": "concat -o API-README.md BASE-README.md src/docs-partials/readme.api-documentation.md",
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme API-README.md --out docs/$npm_package_version src",
+        "docs:postprocess": "sed $'/<\/head>>/{e cat src/docs-partials/api-docs.styles.html}' docs/$npm_package_version/index.html && sed $'/</body>>/{e cat src/docs-partials/api-docs.script.html}' docs/$npm_package_version/index.html && cp docs/$npm_package_version/* docs/*",
+        "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage && rimraf .cache && rimraf BASE-README.md && rimraf API-README.md"
     },
     "watch": {
         "build": {
