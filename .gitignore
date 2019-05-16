@@ -13,6 +13,8 @@ docs/
 **/dist/
 cache/
 .cache
+API-README.md
+BASE-README.md
 
 # misc
 .idea/

@@ -19,13 +19,16 @@
         "test:coverage": "jest --config jest-unit.config.json --coverage",
         "// UTILS SCRIPTS //": "-----------------------------------------------------",
         "publish:coverage": "cat ./coverage/lcov.info | codacy-coverage",
-        "publish:docs": "gh-pages --help",
-        "docs": "run-s docs:base-readme docs:markdown-readme docs:api-readme docs:html docs:postprocess",
+        "publish:docs": "gh-pages --dist docs/ --user 'CI bot <bot@circleci.com>' --add --message 'Automatic documentation update'",
+        "docs": "run-s docs:markdown docs:html docs:postprocess",
+        "docs:markdown": "run-s docs:base-readme docs:markdown-readme docs:api-readme",
         "docs:base-readme": "concat -o BASE-README.md src/docs-partials/readme.header.md src/docs-partials/readme.badges.md src/docs-partials/readme.body.md",
         "docs:markdown-readme": "concat -o README.md BASE-README.md src/docs-partials/readme.markdown-documentation.md",
         "docs:api-readme": "concat -o API-README.md BASE-README.md src/docs-partials/readme.api-documentation.md",
-        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme API-README.md --out docs/$npm_package_version src",
-        "docs:postprocess": "sed $'/<\/head>>/{e cat src/docs-partials/api-docs.styles.html}' docs/$npm_package_version/index.html && sed $'/</body>>/{e cat src/docs-partials/api-docs.script.html}' docs/$npm_package_version/index.html && cp docs/$npm_package_version/* docs/*",
+        "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme API-README.md --out docs/archive/$npm_package_version src",
+        "docs:postprocess": "run-s docs:html-style docs:html-script && cp -R docs/archive/$npm_package_version/* docs/",
+        "docs:html-style": "sed -i .bkp -e '/<\\/head>/r src/docs-partials/api-docs.style.html' -e '//N' docs/archive/$npm_package_version/index.html && rimraf docs/archive/$npm_package_version/index.html.bkp",
+        "docs:html-script": "sed -i .bkp -e '/<\\/body>/r src/docs-partials/api-docs.script.html' -e '//N' docs/archive/$npm_package_version/index.html && rimraf docs/archive/$npm_package_version/index.html.bkp",
         "clean": "rimraf dist && rimraf docs && rimraf site && rimraf coverage && rimraf .cache && rimraf BASE-README.md && rimraf API-README.md"
     },
     "watch": {
@@ -44,18 +47,18 @@
     "devDependencies": {
         "@types/jest": "24.0.13",
         "codacy-coverage": "3.4.0",
+        "concat": "1.0.3",
+        "gh-pages": "2.0.1",
         "husky": "2.3.0",
         "jest": "24.7.1",
         "npm-run-all": "4.1.5",
         "npm-watch": "0.6.0",
         "rimraf": "2.6.3",
+        "showdown": "1.9.0",
         "ts-jest": "24.0.2",
         "tslint": "5.16.0",
-        "typedoc": "0.14.2",
-        "typescript": "3.4.5",
-        "concat": "1.0.3",
-        "showdown": "1.9.0",
-        "gh-pages": "2.0.1"
+        "typedoc": "^0.14.2",
+        "typescript": "3.4.5"
     },
     "engines": {
         "node": ">=6.11.5"
