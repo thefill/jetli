@@ -31,7 +31,10 @@ jobs:
 
             - run:
                   name: Set certificates
-                  command: apk add ca-certificates
+                  command: |
+                      apk update &&
+                      apk add ca-certificates &&
+                      rm -rf /var/cache/apk/*
 
             - restore_cache:
                   keys:
