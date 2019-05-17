@@ -11,6 +11,9 @@ releaseFilters: &releaseFilters
     filters:
         tags:
             only: /^v.*/
+        branches:
+            ignore:
+                - /.*/
 
 # Default filters
 defaultFilters: &defaultFilters
