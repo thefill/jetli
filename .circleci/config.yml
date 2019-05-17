@@ -1,10 +1,10 @@
 version: 2
 
 # Default job config used across whole config file
-defaults: &baseJobConfig
-    working_directory: ~/repo
-    docker:
-        - image: mhart/alpine-node:8.16.0
+#defaults: &baseJobConfig
+#    working_directory: ~/repo
+#    docker:
+#        - image: mhart/alpine-node:8.16.0
 
 jobs:
 #    setup:
@@ -44,7 +44,7 @@ jobs:
                   name: Install packages
                   command: |
                       npm install
-                      
+
             - run:
                   name: Lint code
                   command: npm run lint
