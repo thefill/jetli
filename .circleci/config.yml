@@ -7,36 +7,44 @@ defaults: &baseJobConfig
         - image: mhart/alpine-node:8.16.0
 
 jobs:
-    setup:
-        <<: *baseJobConfig
+#    setup:
+#        <<: *baseJobConfig
+#        steps:
+#            - checkout
+#
+#            - restore_cache:
+#                  keys:
+#                      - v1-dependencies-{{ checksum "package.json" }}
+#                      # fallback to using the latest cache if no exact match is found
+#                      - v1-dependencies-
+#
+#            - run:
+#                  name: Install packages
+#                  command: |
+#                      npm install
+#
+#            - save_cache:
+#                  paths:
+#                      - node_modules
+#                  key: v1-dependencies-{{ checksum "package.json" }}
+#
+#            - persist_to_workspace:
+#                  root: ~/repo
+#                  paths: .
+    verify:
+        #        <<: *baseJobConfig
+        working_directory: ~/repo
+        docker:
+            - image: mhart/alpine-node:8.16.0
         steps:
-            - checkout
-
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      # fallback to using the latest cache if no exact match is found
-                      - v1-dependencies-
+#            - attach_workspace:
+#                  at: ~/repo
 
             - run:
                   name: Install packages
                   command: |
                       npm install
-
-            - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
-
-            - persist_to_workspace:
-                  root: ~/repo
-                  paths: .
-    verify:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
+                      
             - run:
                   name: Lint code
                   command: npm run lint
@@ -48,83 +56,83 @@ jobs:
                       npm run test:coverage &&
                       npm run e2e
 
-    build:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            - run:
-                  name: Build
-                  command: |
-                      npm run build
-
-    publish-coverage:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            - run:
-                  name: Publish test coverage
-                  command: |
-                      npm run publish:coverage
-
-    publish-documentation:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            - run:
-                  name: Build latest docs
-                  command: |
-                      npm run docs
-
-            - run:
-                  name: Publish docs
-                  command: |
-                      npm run publish:docs
-
-    publish-package:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            #            TODO: check how
-            #
-            #            - run:
-            #                  name: Verify package version against repo tag
-            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-
-            - run:
-                  name: Authenticate with registry
-                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-
-            - run:
-                  name: Publish package
-                  command: npm publish
-
-    clean:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            - run:
-                  name: Clean
-                  command: |
-                      npm run clean
+#    build:
+#        <<: *baseJobConfig
+#        steps:
+#            - attach_workspace:
+#                  at: ~/repo
+#
+#            - run:
+#                  name: Build
+#                  command: |
+#                      npm run build
+#
+#    publish-coverage:
+#        <<: *baseJobConfig
+#        steps:
+#            - attach_workspace:
+#                  at: ~/repo
+#
+#            - run:
+#                  name: Publish test coverage
+#                  command: |
+#                      npm run publish:coverage
+#
+#    publish-documentation:
+#        <<: *baseJobConfig
+#        steps:
+#            - attach_workspace:
+#                  at: ~/repo
+#
+#            - run:
+#                  name: Build latest docs
+#                  command: |
+#                      npm run docs
+#
+#            - run:
+#                  name: Publish docs
+#                  command: |
+#                      npm run publish:docs
+#
+#    publish-package:
+#        <<: *baseJobConfig
+#        steps:
+#            - attach_workspace:
+#                  at: ~/repo
+#
+#            #            TODO: check how
+#            #
+#            #            - run:
+#            #                  name: Verify package version against repo tag
+#            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+#
+#            - run:
+#                  name: Authenticate with registry
+#                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+#
+#            - run:
+#                  name: Publish package
+#                  command: npm publish
+#
+#    clean:
+#        <<: *baseJobConfig
+#        steps:
+#            - attach_workspace:
+#                  at: ~/repo
+#
+#            - run:
+#                  name: Clean
+#                  command: |
+#                      npm run clean
 
 workflows:
     version: 2
     test:
         jobs:
-            - setup:
-                  filters:
-                      branches:
-                          only: master
+            #            - setup:
+            #                  filters:
+            #                      branches:
+            #                          only: master
             - verify:
                   filters:
                       branches:
