@@ -4,7 +4,7 @@ version: 2.1
 defaults: &baseJobConfig
     working_directory: ~/repo
     docker:
-        - image: mhart/alpine-node:6.17.0
+        - image: mhart/alpine-node:8.16.0
 
 jobs:
     setup:
@@ -45,10 +45,6 @@ jobs:
                       npm run test:coverage &&
                       npm run e2e
 
-            - run:
-                  name: Publish test coverage
-                  command: |
-                      npm run publish:coverage
     build:
         <<: *baseJobConfig
         steps:
@@ -94,7 +90,7 @@ jobs:
                   at: ~/repo
 
             #            TODO: check how
-            #            
+            #
             #            - run:
             #                  name: Verify package version against repo tag
             #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
@@ -120,6 +116,14 @@ jobs:
 
 workflows:
     version: 2
+    test:
+        jobs:
+            - verify:
+                  requires:
+                      - clean
+                  filters:
+                      branches:
+                          only: master
     build-test-publish:
         jobs:
             - setup:
