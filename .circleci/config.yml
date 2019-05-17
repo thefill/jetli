@@ -146,36 +146,36 @@ workflows:
                           only: /^v.*/
                       branches:
                           only: master
-            - build:
-                  requires:
-                      - clean
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          only: master
-            - publish-coverage:
-                  requires:
-                      - verify
-                      - build
-                  filters:
-                      branches:
-                          only: master
-            - publish-documentation:
-                  requires:
-                      - verify
-                      - build
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          ignore: /.*/
-            - publish-package:
-                  requires:
-                      - verify
-                      - build
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          ignore: /.*/
+#            - build:
+#                  requires:
+#                      - clean
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          only: master
+#            - publish-coverage:
+#                  requires:
+#                      - verify
+#                      - build
+#                  filters:
+#                      branches:
+#                          only: master
+#            - publish-documentation:
+#                  requires:
+#                      - verify
+#                      - build
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          ignore: /.*/
+#            - publish-package:
+#                  requires:
+#                      - verify
+#                      - build
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          ignore: /.*/
