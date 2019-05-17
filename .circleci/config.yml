@@ -129,30 +129,30 @@ workflows:
                   filters:
                       branches:
                           only: master
-    build-test-publish:
-        jobs:
-            - setup:
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          only: master
-            - clean:
-                  requires:
-                      - setup
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          ignore: /.*/
-            - verify:
-                  requires:
-                      - clean
-                  filters:
-                      tags:
-                          only: /^v.*/
-                      branches:
-                          only: master
+#    build-test-publish:
+#        jobs:
+#            - setup:
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          only: master
+#            - clean:
+#                  requires:
+#                      - setup
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          ignore: /.*/
+#            - verify:
+#                  requires:
+#                      - clean
+#                  filters:
+#                      tags:
+#                          only: /^v.*/
+#                      branches:
+#                          only: master
 #            - build:
 #                  requires:
 #                      - clean
