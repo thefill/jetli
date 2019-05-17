@@ -119,8 +119,6 @@ workflows:
     test:
         jobs:
             - verify:
-                  requires:
-                      - clean
                   filters:
                       branches:
                           only: master
