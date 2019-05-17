@@ -94,6 +94,7 @@ jobs:
                   at: ~/repo
 
             #            TODO: check how
+            #            
             #            - run:
             #                  name: Verify package version against repo tag
             #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
