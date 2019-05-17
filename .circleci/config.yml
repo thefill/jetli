@@ -1,50 +1,55 @@
-version: 2
+version: 2.1
 
 # Default job config used across whole config file
-#defaults: &baseJobConfig
-#    working_directory: ~/repo
-#    docker:
-#        - image: mhart/alpine-node:8.16.0
+defaultConfig: &baseJobConfig
+    working_directory: ~/repo
+    docker:
+        - image: mhart/alpine-node:8.16.0
+
+# Default release filters
+releaseFilters: &releaseFilters
+    filters:
+        tags:
+            only: /^v.*/
+
+# Default filters
+defaultFilters: &defaultFilters
+    filters:
+        branches:
+            only:
+                - /feature\/.*/
+                - master
 
 jobs:
-    #    setup:
-    #        <<: *baseJobConfig
-    #        steps:
-    #            - checkout
-    #
-    #            - restore_cache:
-    #                  keys:
-    #                      - v1-dependencies-{{ checksum "package.json" }}
-    #                      # fallback to using the latest cache if no exact match is found
-    #                      - v1-dependencies-
-    #
-    #            - run:
-    #                  name: Install packages
-    #                  command: |
-    #                      npm install
-    #
-    #            - save_cache:
-    #                  paths:
-    #                      - node_modules
-    #                  key: v1-dependencies-{{ checksum "package.json" }}
-    #
-    #            - persist_to_workspace:
-    #                  root: ~/repo
-    #                  paths: .
-    verify:
-        #        <<: *baseJobConfig
-        working_directory: ~/repo
-        docker:
-            - image: mhart/alpine-node:8.16.0
+    setup:
+        <<: *baseJobConfig
         steps:
-            #            - attach_workspace:
-            #                  at: ~/repo
             - checkout
-            
+
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-
+
             - run:
                   name: Install packages
                   command: |
                       npm install
+
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
+    verify:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
 
             - run:
                   name: Lint code
@@ -57,155 +62,117 @@ jobs:
                       npm run test:coverage &&
                       npm run e2e
 
-#    build:
-#        <<: *baseJobConfig
-#        steps:
-#            - attach_workspace:
-#                  at: ~/repo
-#
-#            - run:
-#                  name: Build
-#                  command: |
-#                      npm run build
-#
-#    publish-coverage:
-#        <<: *baseJobConfig
-#        steps:
-#            - attach_workspace:
-#                  at: ~/repo
-#
-#            - run:
-#                  name: Publish test coverage
-#                  command: |
-#                      npm run publish:coverage
-#
-#    publish-documentation:
-#        <<: *baseJobConfig
-#        steps:
-#            - attach_workspace:
-#                  at: ~/repo
-#
-#            - run:
-#                  name: Build latest docs
-#                  command: |
-#                      npm run docs
-#
-#            - run:
-#                  name: Publish docs
-#                  command: |
-#                      npm run publish:docs
-#
-#    publish-package:
-#        <<: *baseJobConfig
-#        steps:
-#            - attach_workspace:
-#                  at: ~/repo
-#
-#            #            TODO: check how
-#            #
-#            #            - run:
-#            #                  name: Verify package version against repo tag
-#            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-#
-#            - run:
-#                  name: Authenticate with registry
-#                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-#
-#            - run:
-#                  name: Publish package
-#                  command: npm publish
-#
-#    clean:
-#        <<: *baseJobConfig
-#        steps:
-#            - attach_workspace:
-#                  at: ~/repo
-#
-#            - run:
-#                  name: Clean
-#                  command: |
-#                      npm run clean
+    build:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Build
+                  command: |
+                      npm run build
+
+    publish-coverage:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Publish test coverage
+                  command: |
+                      npm run publish:coverage
+
+    publish-documentation:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Build latest docs
+                  command: |
+                      npm run docs
+
+            - run:
+                  name: Publish docs
+                  command: |
+                      npm run publish:docs
+
+    publish-package:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            #            TODO: check how
+            #
+            #            - run:
+            #                  name: Verify package version against repo tag
+            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Publish package
+                  command: npm publish
+
+    clean:
+        <<: *baseJobConfig
+        steps:
+            - attach_workspace:
+                  at: ~/repo
+
+            - run:
+                  name: Clean
+                  command: |
+                      npm run clean
 
 workflows:
     version: 2
-    test:
+    build-test:
         jobs:
-            #            - setup:
-            #                  filters:
-            #                      branches:
-            #                          only: master
+            - setup:
+                  <<: *defaultFilters
+            - clean:
+                  requires:
+                      - setup
             - verify:
-                  filters:
-                      branches:
-                          ignore:
-                              - develop
-                              - /feature-.*/
-    test2:
+                  requires:
+                      - clean
+            - build:
+                  requires:
+                      - clean
+            - publish-coverage:
+                  requires:
+                      - verify
+                      - build
+
+    build-test-release:
         jobs:
-            #            - setup:
-            #                  filters:
-            #                      branches:
-            #                          only: master
+            - setup:
+                  <<: *releaseFilters
+            - clean:
+                  requires:
+                      - setup
             - verify:
-                  filters:
-                      branches:
-                          ignore:
-                              - develop
-                              - /feature-.*/
-#    build-test-publish:
-#        jobs:
-#            - setup:
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          only: master
-#            - clean:
-#                  requires:
-#                      - setup
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          ignore: /.*/
-#            - verify:
-#                  requires:
-#                      - clean
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          only: master
-#            - build:
-#                  requires:
-#                      - clean
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          only: master
-#            - publish-coverage:
-#                  requires:
-#                      - verify
-#                      - build
-#                  filters:
-#                      branches:
-#                          only: master
-#            - publish-documentation:
-#                  requires:
-#                      - verify
-#                      - build
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          ignore: /.*/
-#            - publish-package:
-#                  requires:
-#                      - verify
-#                      - build
-#                  filters:
-#                      tags:
-#                          only: /^v.*/
-#                      branches:
-#                          ignore: /.*/
+                  requires:
+                      - clean
+            - build:
+                  requires:
+                      - clean
+            - publish-coverage:
+                  requires:
+                      - verify
+                      - build
+            - publish-documentation:
+                  requires:
+                      - verify
+                      - build
+            - publish-package:
+                  requires:
+                      - verify
+                      - build
