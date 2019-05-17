@@ -7,38 +7,38 @@ version: 2
 #        - image: mhart/alpine-node:8.16.0
 
 jobs:
-#    setup:
-#        <<: *baseJobConfig
-#        steps:
-#            - checkout
-#
-#            - restore_cache:
-#                  keys:
-#                      - v1-dependencies-{{ checksum "package.json" }}
-#                      # fallback to using the latest cache if no exact match is found
-#                      - v1-dependencies-
-#
-#            - run:
-#                  name: Install packages
-#                  command: |
-#                      npm install
-#
-#            - save_cache:
-#                  paths:
-#                      - node_modules
-#                  key: v1-dependencies-{{ checksum "package.json" }}
-#
-#            - persist_to_workspace:
-#                  root: ~/repo
-#                  paths: .
+    #    setup:
+    #        <<: *baseJobConfig
+    #        steps:
+    #            - checkout
+    #
+    #            - restore_cache:
+    #                  keys:
+    #                      - v1-dependencies-{{ checksum "package.json" }}
+    #                      # fallback to using the latest cache if no exact match is found
+    #                      - v1-dependencies-
+    #
+    #            - run:
+    #                  name: Install packages
+    #                  command: |
+    #                      npm install
+    #
+    #            - save_cache:
+    #                  paths:
+    #                      - node_modules
+    #                  key: v1-dependencies-{{ checksum "package.json" }}
+    #
+    #            - persist_to_workspace:
+    #                  root: ~/repo
+    #                  paths: .
     verify:
         #        <<: *baseJobConfig
         working_directory: ~/repo
         docker:
             - image: mhart/alpine-node:8.16.0
         steps:
-#            - attach_workspace:
-#                  at: ~/repo
+            #            - attach_workspace:
+            #                  at: ~/repo
 
             - run:
                   name: Install packages
@@ -139,18 +139,18 @@ workflows:
                           ignore:
                               - develop
                               - /feature-.*/
-      test2:
-          jobs:
-              #            - setup:
-              #                  filters:
-              #                      branches:
-              #                          only: master
-              - verify:
-                    filters:
-                        branches:
-                            ignore:
-                                - develop
-                                - /feature-.*/
+    test2:
+        jobs:
+            #            - setup:
+            #                  filters:
+            #                      branches:
+            #                          only: master
+            - verify:
+                  filters:
+                      branches:
+                          ignore:
+                              - develop
+                              - /feature-.*/
 #    build-test-publish:
 #        jobs:
 #            - setup:
