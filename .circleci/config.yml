@@ -39,7 +39,8 @@ jobs:
         steps:
             #            - attach_workspace:
             #                  at: ~/repo
-
+            - checkout
+            
             - run:
                   name: Install packages
                   command: |
