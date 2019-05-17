@@ -136,7 +136,21 @@ workflows:
             - verify:
                   filters:
                       branches:
-                          only: master
+                          ignore:
+                              - develop
+                              - /feature-.*/
+      test2:
+          jobs:
+              #            - setup:
+              #                  filters:
+              #                      branches:
+              #                          only: master
+              - verify:
+                    filters:
+                        branches:
+                            ignore:
+                                - develop
+                                - /feature-.*/
 #    build-test-publish:
 #        jobs:
 #            - setup:
