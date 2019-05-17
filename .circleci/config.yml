@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 
 # Default job config used across whole config file
 defaults: &baseJobConfig
@@ -18,7 +18,10 @@ jobs:
                       # fallback to using the latest cache if no exact match is found
                       - v1-dependencies-
 
-            - run: npm install
+            - run:
+                  name: Install packages
+                  command: |
+                      npm install
 
             - save_cache:
                   paths:
@@ -118,6 +121,10 @@ workflows:
     version: 2
     test:
         jobs:
+            - setup:
+                  filters:
+                      branches:
+                          only: master
             - verify:
                   filters:
                       branches:
