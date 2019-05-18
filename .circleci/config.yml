@@ -23,17 +23,6 @@ defaultFilters: &defaultFilters
                 - /feature\/.*/
                 - master
 
-# Attach to workspace
-attachToWorkspace: &attachToWorkspace
-    - attach_workspace:
-          at: ~/repo
-
-# Persist to workspace
-persistToWorkspace: &persistToWorkspace
-    - persist_to_workspace:
-          root: ~/repo
-          paths: .
-
 jobs:
     setup:
         <<: *baseJobConfig
@@ -55,92 +44,106 @@ jobs:
                       - node_modules
                   key: v1-dependencies-{{ checksum "package.json" }}
 
-            <<: *persistToWorkspace
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
     verify:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                - run:
-                      name: Lint code
-                      command: npm run lint
+            - run:
+                  name: Lint code
+                  command: npm run lint
 
-                - run:
-                      name: Execute unit & E2E tests and check test coverage
-                      command: |
-                          npm run test &&
-                          npm run test:coverage &&
-                          npm run e2e
+            - run:
+                  name: Execute unit & E2E tests and check test coverage
+                  command: |
+                      npm run test &&
+                      npm run test:coverage &&
+                      npm run e2e
 
-            <<: *persistToWorkspace
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
 
     build:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                - run:
-                      name: Build
-                      command: |
-                          npm run build
+            - run:
+                  name: Build
+                  command: |
+                      npm run build
 
-            <<: *persistToWorkspace
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
 
     publish-coverage:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                - run:
-                      name: Publish test coverage
-                      command: |
-                          npm run publish:coverage
+            - run:
+                  name: Publish test coverage
+                  command: |
+                      npm run publish:coverage
 
     publish-documentation:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                - run:
-                      name: Build latest docs
-                      command: |
-                          npm run docs
+            - run:
+                  name: Build latest docs
+                  command: |
+                      npm run docs
 
-                - run:
-                      name: Publish docs
-                      command: |
-                          npm run publish:docs
+            - run:
+                  name: Publish docs
+                  command: |
+                      npm run publish:docs
 
     publish-package:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                #            TODO: check how
-                #
-                #            - run:
-                #                  name: Verify package version against repo tag
-                #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            #            TODO: check how
+            #
+            #            - run:
+            #                  name: Verify package version against repo tag
+            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
 
-                - run:
-                      name: Authenticate with registry
-                      command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
 
-                - run:
-                      name: Publish package
-                      command: npm publish
+            - run:
+                  name: Publish package
+                  command: npm publish
 
     clean:
         <<: *baseJobConfig
         steps:
-            <<: *attachToWorkspace
+            - attach_workspace:
+                  at: ~/repo
 
-                - run:
-                      name: Clean
-                      command: |
-                          npm run clean
+            - run:
+                  name: Clean
+                  command: |
+                      npm run clean
 
-                  <<: *persistToWorkspace
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths: .
 
 workflows:
     version: 2
