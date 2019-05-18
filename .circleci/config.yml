@@ -56,6 +56,8 @@ jobs:
     build-lint-test:
         <<: *baseJobConfig
         steps:
+            - checkout
+
             - restore_cache:
                   <<: *restoreCacheConfig
 
@@ -84,6 +86,8 @@ jobs:
     publish-coverage:
         <<: *baseJobConfig
         steps:
+            - checkout
+
             - attach_workspace:
                   at: ~/repo
 
@@ -98,6 +102,8 @@ jobs:
     publish-documentation:
         <<: *baseJobConfig
         steps:
+            - checkout
+
             - attach_workspace:
                   at: ~/repo
 
@@ -117,6 +123,8 @@ jobs:
     publish-package:
         <<: *baseJobConfig
         steps:
+            - checkout
+              
             - attach_workspace:
                   at: ~/repo
 
