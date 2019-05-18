@@ -4,7 +4,7 @@ version: 2.1
 defaultConfig: &baseJobConfig
     working_directory: ~/repo
     docker:
-        - image: mhart/alpine-node:8.16.0
+        - image: fill/alpine-node:8.16.0
 
 # Default release filters
 releaseFilters: &releaseFilters
@@ -28,13 +28,6 @@ jobs:
         <<: *baseJobConfig
         steps:
             - checkout
-
-            - run:
-                  name: Set certificates
-                  command: |
-                      apk update &&
-                      apk add ca-certificates &&
-                      rm -rf /var/cache/apk/*
 
             - restore_cache:
                   keys:
