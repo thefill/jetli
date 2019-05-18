@@ -95,6 +95,11 @@ jobs:
                   <<: *restoreCacheConfig
 
             - run:
+                  name: ls
+                  command: |
+                      ls -la
+
+            - run:
                   name: Publish test coverage
                   command: |
                       npm run publish:coverage
@@ -124,7 +129,7 @@ jobs:
         <<: *baseJobConfig
         steps:
             - checkout
-              
+
             - attach_workspace:
                   at: ~/repo
 
