@@ -39,6 +39,11 @@ jobs:
                   name: Install packages
                   command: npm install
 
+            - run:
+                  name: Clean
+                  command: |
+                      npm run clean
+
             - save_cache:
                   paths:
                       - node_modules
@@ -47,7 +52,7 @@ jobs:
             - persist_to_workspace:
                   root: ~/repo
                   paths: .
-    verify:
+    build-lint-test:
         <<: *baseJobConfig
         steps:
             - attach_workspace:
@@ -63,16 +68,6 @@ jobs:
                       npm run test &&
                       npm run test:coverage &&
                       npm run e2e
-
-            - persist_to_workspace:
-                  root: ~/repo
-                  paths: .
-
-    build:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
 
             - run:
                   name: Build
@@ -130,36 +125,15 @@ jobs:
                   name: Publish package
                   command: npm publish
 
-    clean:
-        <<: *baseJobConfig
-        steps:
-            - attach_workspace:
-                  at: ~/repo
-
-            - run:
-                  name: Clean
-                  command: |
-                      npm run clean
-
-            - persist_to_workspace:
-                  root: ~/repo
-                  paths: .
-
 workflows:
     version: 2
     build-test:
         jobs:
             - setup:
                   <<: *defaultFilters
-            - clean:
+            - build-lint-test:
                   requires:
                       - setup
-            - verify:
-                  requires:
-                      - clean
-            - build:
-                  requires:
-                      - verify
             - publish-coverage:
                   requires:
                       - verify
@@ -169,15 +143,9 @@ workflows:
         jobs:
             - setup:
                   <<: *releaseFilters
-            - clean:
+            - build-lint-test:
                   requires:
                       - setup
-            - verify:
-                  requires:
-                      - clean
-            - build:
-                  requires:
-                      - verify
             - publish-coverage:
                   requires:
                       - verify
