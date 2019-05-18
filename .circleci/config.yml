@@ -23,6 +23,17 @@ defaultFilters: &defaultFilters
                 - /feature\/.*/
                 - master
 
+restoreCacheConfig: &restoreCacheConfig
+    keys:
+        - v1-dependencies-{{ checksum "package.json" }}
+        # fallback to using the latest cache if no exact match is found
+        - v1-dependencies-
+
+saveCacheConfig: &saveCacheConfig
+    paths:
+        - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}
+
 jobs:
     setup:
         <<: *baseJobConfig
@@ -30,33 +41,23 @@ jobs:
             - checkout
 
             - restore_cache:
-                  keys:
-                      - v1-dependencies-{{ checksum "package.json" }}
-                      # fallback to using the latest cache if no exact match is found
-                      - v1-dependencies-
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Install packages
                   command: npm install
 
-            - run:
-                  name: Clean
-                  command: |
-                      npm run clean
-
             - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-dependencies-{{ checksum "package.json" }}
+                  <<: *saveCacheConfig
 
-            - persist_to_workspace:
-                  root: ~/repo
-                  paths: .
+    #            - persist_to_workspace:
+    #                  root: ~/repo
+    #                  paths: .
     build-lint-test:
         <<: *baseJobConfig
         steps:
-            - attach_workspace:
-                  at: ~/repo
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Lint code
@@ -76,13 +77,18 @@ jobs:
 
             - persist_to_workspace:
                   root: ~/repo
-                  paths: .
+                  paths:
+                      - dist
+                      - coverage
 
     publish-coverage:
         <<: *baseJobConfig
         steps:
             - attach_workspace:
                   at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Publish test coverage
@@ -94,6 +100,9 @@ jobs:
         steps:
             - attach_workspace:
                   at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Build latest docs
@@ -110,6 +119,9 @@ jobs:
         steps:
             - attach_workspace:
                   at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             #            TODO: check how
             #
