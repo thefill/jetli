@@ -136,8 +136,7 @@ workflows:
                       - setup
             - publish-coverage:
                   requires:
-                      - verify
-                      - build
+                      - build-lint-test
 
     build-test-release:
         jobs:
@@ -148,13 +147,10 @@ workflows:
                       - setup
             - publish-coverage:
                   requires:
-                      - verify
-                      - build
+                      - build-lint-test
             - publish-documentation:
                   requires:
-                      - verify
-                      - build
+                      - build-lint-test
             - publish-package:
                   requires:
-                      - verify
-                      - build
+                      - build-lint-test
