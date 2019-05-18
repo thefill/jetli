@@ -159,7 +159,7 @@ workflows:
                       - clean
             - build:
                   requires:
-                      - clean
+                      - verify
             - publish-coverage:
                   requires:
                       - verify
@@ -177,7 +177,7 @@ workflows:
                       - clean
             - build:
                   requires:
-                      - clean
+                      - verify
             - publish-coverage:
                   requires:
                       - verify
