@@ -23,9 +23,11 @@
     },
     "reporters": [
         "default",
-        "jest-junit"
-    ],
-    "jest-unit": {
-        "outputDirectory": "reports/junit/"
-    }
+        [
+            "jest-junit",
+            {
+                "outputDirectory": "reports/junit/"
+            }
+        ]
+    ]
 }
