@@ -68,20 +68,12 @@ jobs:
             - run:
                   name: Execute unit & E2E tests and check test coverage
                   command: |
-                      npm run test &&
-                      npm run test:coverage &&
-                      npm run e2e
+                      npm run test
 
             - run:
                   name: Build
                   command: |
                       npm run build
-
-            - run:
-                  name: ls
-                  command: |
-                      ls -la
-
 
             - persist_to_workspace:
                   root: ~/repo
@@ -99,11 +91,6 @@ jobs:
 
             - restore_cache:
                   <<: *restoreCacheConfig
-
-            - run:
-                  name: ls
-                  command: |
-                      ls -la
 
             - run:
                   name: Publish test coverage
