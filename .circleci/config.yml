@@ -124,6 +124,11 @@ jobs:
                       npm run docs
 
             - run:
+                  name: Verify
+                  command: |
+                      sed -e '/<\/body>/r src/docs-partials/api-docs.style.html' -e '//N' docs/archive/0.0.3/index.html
+
+            - run:
                   name: Publish docs
                   command: |
                       npm run publish:docs
@@ -149,6 +154,7 @@ jobs:
 
 workflows:
     version: 2
+
     build-test:
         jobs:
             - setup:
