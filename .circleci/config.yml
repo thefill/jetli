@@ -178,7 +178,7 @@ workflows:
                   <<: *releaseFilters
                   requires:
                       - build-lint-test
-#            - publish-package:
-#                  <<: *releaseFilters
-#                  requires:
-#                      - build-lint-test
+            - publish-package:
+                  <<: *releaseFilters
+                  requires:
+                      - build-lint-test
