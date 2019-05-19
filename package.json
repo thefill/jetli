@@ -69,6 +69,7 @@
         "node": ">=8.x.x"
     },
     "author": "Filip Dabrowski",
+    "homepage": "https://thefill.github.io/jetli",
     "repository": {
         "type": "git",
         "url": "git@github.com:thefill/jetli.git"
