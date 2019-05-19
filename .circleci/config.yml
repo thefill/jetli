@@ -49,10 +49,7 @@ jobs:
 
             - save_cache:
                   <<: *saveCacheConfig
-
-    #            - persist_to_workspace:
-    #                  root: ~/repo
-    #                  paths: .
+                  
     build-lint-test:
         <<: *baseJobConfig
         steps:
