@@ -15,6 +15,15 @@ releaseFilters: &releaseFilters
             ignore:
                 - /.*/
 
+# Default release filters
+documentationFilters: &documentationFilters
+    filters:
+        tags:
+            only: /^docs/
+        branches:
+            ignore:
+                - /.*/
+
 # Default filters
 defaultFilters: &defaultFilters
     filters:
@@ -160,6 +169,23 @@ workflows:
                       - setup
             - publish-tests:
                   <<: *defaultFilters
+                  requires:
+                      - build-lint-test
+
+    documentation:
+        jobs:
+            - setup:
+                  <<: *documentationFilters
+            - build-lint-test:
+                  <<: *documentationFilters
+                  requires:
+                      - setup
+            - publish-tests:
+                  <<: *documentationFilters
+                  requires:
+                      - build-lint-test
+            - publish-documentation:
+                  <<: *documentationFilters
                   requires:
                       - build-lint-test
 
