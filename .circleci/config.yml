@@ -152,86 +152,8 @@ jobs:
                   name: Publish package
                   command: npm publish
 
-    test-docs:
-        <<: *baseJobConfig
-        steps:
-            - checkout
-
-            - attach_workspace:
-                  at: ~/repo
-
-            - restore_cache:
-                  <<: *restoreCacheConfig
-
-            - run:
-                  name: Build latest docs
-                  command: |
-                      npm run docs
-
-            - run:
-                  name: Verify 1
-                  command: |
-                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 2
-                  command: |
-                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 2.1
-                  command: |
-                      sed '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 2.2
-                  command: |
-                      sed '/.*<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 2.3
-                  command: |
-                      sed '/main\.css/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 2.4
-                  command: |
-                      sed '/<\/script>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 3
-                  command: |
-                      sed -i.bak -e '/<\/head>/r src/docs-partials/api-docs.style.html/N' docs/archive/0.0.3/index.html &&
-                      rm docs/archive/0.0.3/index.html.bak &&
-                      cat docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 4
-                  command: |
-                      sed -e 's/<\/head>/123/' docs/archive/0.0.3/index.html
-
-            - run:
-                  name: Verify 5
-                  command: |
-                      sed 's/<\/head>/123/' docs/archive/0.0.3/index.html
-
 workflows:
     version: 2
-
-    test-doocs:
-        jobs:
-            - setup:
-                  filters:
-                      branches:
-                          only:
-                              - /.*/
-            - test-docs:
-                  filters:
-                      branches:
-                          only:
-                              - /.*/
-                  requires:
-                      - setup
 
     build-test:
         jobs:
