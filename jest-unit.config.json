@@ -12,6 +12,7 @@
         "node"
     ],
     "testEnvironment": "node",
+    "coverageDirectory": "reports/coverage",
     "coverageThreshold": {
         "global": {
             "branches": 100,
@@ -19,5 +20,12 @@
             "lines": 100,
             "statements": 100
         }
+    },
+    "reporters": [
+        "default",
+        "jest-junit"
+    ],
+    "jest-unit": {
+        "outputDirectory": "reports/junit/"
     }
 }
