@@ -171,12 +171,32 @@ jobs:
             - run:
                   name: Verify 1
                   command: |
-                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html' -e '//N' docs/archive/0.0.3/index.html
+                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
 
             - run:
                   name: Verify 2
                   command: |
-                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html/N' docs/archive/0.0.3/index.html
+                      sed -e '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 2.1
+                  command: |
+                      sed '/<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 2.2
+                  command: |
+                      sed '/.*<\/head>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 2.3
+                  command: |
+                      sed '/main\.css/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 2.4
+                  command: |
+                      sed '/<\/script>/r src/docs-partials/api-docs.style.html' docs/archive/0.0.3/index.html
 
             - run:
                   name: Verify 3
@@ -184,6 +204,16 @@ jobs:
                       sed -i.bak -e '/<\/head>/r src/docs-partials/api-docs.style.html/N' docs/archive/0.0.3/index.html &&
                       rm docs/archive/0.0.3/index.html.bak &&
                       cat docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 4
+                  command: |
+                      sed -e 's/<\/head>/123/' docs/archive/0.0.3/index.html
+
+            - run:
+                  name: Verify 5
+                  command: |
+                      sed 's/<\/head>/123/' docs/archive/0.0.3/index.html
 
 workflows:
     version: 2
