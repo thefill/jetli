@@ -1,23 +1,5 @@
 [//]: # (Readme partial used by an default readme page)
 
-# Jetli
-
-Simple, lightweight dependency injector - supports factories, classes and primitives.
-
-[//]: # (Readme partial used by an default readme page)
-
-[![Code quality](https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176)](https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Grade)
-[![Coverage](https://api.codacy.com/project/badge/Coverage/6129bd9a22f043a09e9cd89141d60176)](https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&utm_medium=referral&utm_content=thefill/jetli&utm_campaign=Badge_Coverage)
-[![Greenkeeper badge](https://badges.greenkeeper.io/thefill/jetli.svg)](https://greenkeeper.io/)
-[![CricleCi badge](https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield)](https://circleci.com/gh/thefill/jetli)
-
-![npm version](https://img.shields.io/npm/v/jetli.svg)
-[![Open issues](https://img.shields.io/github/issues-raw/thefill/jetli.svg)](https://github.com/thefill/jetli/issues)
-![Types: TypeScript](https://img.shields.io/npm/types/jetli.svg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-[//]: # (Readme partial used by an default readme page)
-
 ## Main features
 
 *   tiny & easy to use: only 3 methods
@@ -277,11 +259,3 @@ fighter2.punch();</pre>
 ## Documentation
 
 You can find full documentation [here](todo)
-
-[//]: # (Readme partial used by an markdown readme page)
-
-## Documentation
-
-Full API documentation for this package can be found [here](TODO)
-
-For the archival API documentation please refer to the [archival documentation pages](https://thefill.github.io/jetli/archive "API documentations for the archival versions").

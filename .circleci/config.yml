@@ -1,94 +1,174 @@
-version: 2
+version: 2.1
+
+# Default job config used across whole config file
+defaultConfig: &baseJobConfig
+    working_directory: ~/repo
+    docker:
+        - image: fill/alpine-node:8.16.0
+
+# Default release filters
+releaseFilters: &releaseFilters
+    filters:
+        tags:
+            only: /^v.*/
+        branches:
+            ignore:
+                - /.*/
+
+# Default filters
+defaultFilters: &defaultFilters
+    filters:
+        branches:
+            only:
+                - /feature\/.*/
+                - master
+
+restoreCacheConfig: &restoreCacheConfig
+    keys:
+        - v1-dependencies-{{ checksum "package.json" }}
+        # fallback to using the latest cache if no exact match is found
+        - v1-dependencies-
+
+saveCacheConfig: &saveCacheConfig
+    paths:
+        - node_modules
+    key: v1-dependencies-{{ checksum "package.json" }}
+
 jobs:
-    build:
-        docker:
-            - image: mhart/alpine-node:6.17.0
-
-        working_directory: ~/jetli
-
+    setup:
+        <<: *baseJobConfig
         steps:
             - checkout
 
+            - restore_cache:
+                  <<: *restoreCacheConfig
+
             - run:
-                  name: Install dependencies
+                  name: Install packages
                   command: npm install
+
+            - save_cache:
+                  <<: *saveCacheConfig
+
+    #            - persist_to_workspace:
+    #                  root: ~/repo
+    #                  paths: .
+    build-lint-test:
+        <<: *baseJobConfig
+        steps:
+            - checkout
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Lint code
                   command: npm run lint
 
             - run:
+                  name: Execute unit & E2E tests and check test coverage
+                  command: |
+                      npm run test
+
+            - run:
                   name: Build
                   command: |
                       npm run build
 
-            - run:
-                  name: Execute unit & E2E tests and check test coverage
-                  command: |
-                      npm run test &&
-                      npm run test:coverage &&
-                      npm run e2e
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths:
+                      - dist
+                      - coverage
+
+    publish-coverage:
+        <<: *baseJobConfig
+        steps:
+            - checkout
+
+            - attach_workspace:
+                  at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
 
             - run:
                   name: Publish test coverage
                   command: |
                       npm run publish:coverage
 
+    publish-documentation:
+        <<: *baseJobConfig
+        steps:
+            - checkout
+
+            - attach_workspace:
+                  at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
+
             - run:
-                  name: Clean
+                  name: Build latest docs
                   command: |
-                      npm run clean
+                      npm run docs
 
-#            # Save artifacts
-#            - store_artifacts:
-#                  path: /tmp/artifacts
-#                  destination: build
-#
-#            # Upload test results
-#            - store_test_results:
-#                  path: /tmp/test-reports
+            - run:
+                  name: Publish docs
+                  command: |
+                      npm run publish:docs
 
-#    documentation:
-#       ...
-#    publish:
-#       ...
-#    deploy-stage:
-#        docker:
-#            - image: ubuntu:14.04
-#        working_directory: /tmp/jetli
-#        steps:
-#            - run:
-#                  name: Deploy if tests pass and branch is Staging
-#                  command: ansible-playbook site.yml -i staging
-#
-#    deploy-prod:
-#        docker:
-#            - image: ubuntu:14.04
-#        working_directory: /tmp/jetli
-#        steps:
-#            - run:
-#                  name: Deploy if tests pass and branch is Master
-#                  command: ansible-playbook site.yml -i production
+    publish-package:
+        <<: *baseJobConfig
+        steps:
+            - checkout
+
+            - attach_workspace:
+                  at: ~/repo
+
+            - restore_cache:
+                  <<: *restoreCacheConfig
+
+            #            TODO: check how
+            #
+            #            - run:
+            #                  name: Verify package version against repo tag
+            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Authenticate with registry
+                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+
+            - run:
+                  name: Publish package
+                  command: npm publish
 
 workflows:
     version: 2
-    build-deploy:
+    build-test:
         jobs:
-            - build:
-                  filters:
-                      branches:
-                          ignore:
-                              - develop
-                              - /feature-.*/
-#            - deploy-stage:
-#                  requires:
-#                      - build
-#                  filters:
-#                      branches:
-#                          only: staging
-#            - deploy-prod:
-#                  requires:
-#                      - build
-#                  filters:
-#                      branches:
-#                          only: master
+            - setup:
+                  <<: *defaultFilters
+            - build-lint-test:
+                  requires:
+                      - setup
+            - publish-coverage:
+                  requires:
+                      - build-lint-test
+
+    build-test-release:
+        jobs:
+            - setup:
+                  <<: *releaseFilters
+            - build-lint-test:
+                  requires:
+                      - setup
+            - publish-coverage:
+                  requires:
+                      - build-lint-test
+            - publish-documentation:
+                  requires:
+                      - build-lint-test
+            - publish-package:
+                  requires:
+                      - build-lint-test
