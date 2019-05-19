@@ -3,12 +3,14 @@ docs/
 src/
 README.html
 TODO.md
+API-README.md
+BASE-README.md
 
 # dependencies
 node_modules/
 
 # testing
-coverage/
+reports/
 
 # production
 build/
