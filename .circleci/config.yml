@@ -18,6 +18,9 @@ releaseFilters: &releaseFilters
 # Default filters
 defaultFilters: &defaultFilters
     filters:
+        tags:
+            ignore:
+                - /.*/
         branches:
             only:
                 - /feature\/.*/
@@ -49,7 +52,7 @@ jobs:
 
             - save_cache:
                   <<: *saveCacheConfig
-                  
+
     build-lint-test:
         <<: *baseJobConfig
         steps:
@@ -76,9 +79,9 @@ jobs:
                   root: ~/repo
                   paths:
                       - dist
-                      - coverage
+                      - reports
 
-    publish-coverage:
+    publish-tests:
         <<: *baseJobConfig
         steps:
             - checkout
@@ -88,6 +91,9 @@ jobs:
 
             - restore_cache:
                   <<: *restoreCacheConfig
+
+            - store_test_results:
+                  path: reports/junit
 
             - run:
                   name: Publish test coverage
@@ -104,6 +110,12 @@ jobs:
 
             - restore_cache:
                   <<: *restoreCacheConfig
+
+            - run:
+                  name: Setup git user
+                  command: |
+                      git config user.email "bot@circleci.com"
+                      git config user.name "ci-bot"
 
             - run:
                   name: Build latest docs
@@ -126,12 +138,6 @@ jobs:
             - restore_cache:
                   <<: *restoreCacheConfig
 
-            #            TODO: check how
-            #
-            #            - run:
-            #                  name: Verify package version against repo tag
-            #                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-
             - run:
                   name: Authenticate with registry
                   command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
@@ -150,7 +156,7 @@ workflows:
                   <<: *defaultFilters
                   requires:
                       - setup
-            - publish-coverage:
+            - publish-tests:
                   <<: *defaultFilters
                   requires:
                       - build-lint-test
@@ -163,7 +169,7 @@ workflows:
                   <<: *releaseFilters
                   requires:
                       - setup
-            - publish-coverage:
+            - publish-tests:
                   <<: *releaseFilters
                   requires:
                       - build-lint-test
