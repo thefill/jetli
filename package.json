@@ -32,7 +32,7 @@
         "docs:html-script": "sed -i .bkp -e '/<\\/body>/r src/docs-partials/api-docs.script.html' -e '//N' docs/archive/$npm_package_version/index.html && rimraf docs/archive/$npm_package_version/index.html.bkp",
         "clean": "run-p clean:build clean:docs clean:test",
         "clean:build": "rimraf dist",
-        "clean:docs": "rimraf docs &&  && rimraf .cache && rimraf BASE-README.md && rimraf API-README.md",
+        "clean:docs": "rimraf docs && rimraf .cache && rimraf BASE-README.md && rimraf API-README.md",
         "clean:test": "rimraf coverage"
     },
     "watch": {
