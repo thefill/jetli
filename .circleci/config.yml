@@ -23,8 +23,8 @@ defaultFilters: &defaultFilters
                 - /.*/
         branches:
             only:
-                #                - /feature-.*/
-                #                - /feature\/.*/
+                - /feature-.*/
+                - /feature\/.*/
                 - master
 
 restoreCacheConfig: &restoreCacheConfig
