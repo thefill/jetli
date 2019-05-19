@@ -182,7 +182,7 @@ jobs:
                   name: Verify 3
                   command: |
                       sed -i.bak -e '/<\/body>/r src/docs-partials/api-docs.style.html/N' docs/archive/0.0.3/index.html &&
-                      rm docs/archive/0.0.3/index.html.bak" &&
+                      rm docs/archive/0.0.3/index.html.bak &&
                       cat docs/archive/0.0.3/index.html
 
 workflows:
