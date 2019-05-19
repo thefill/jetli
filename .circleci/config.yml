@@ -77,6 +77,12 @@ jobs:
                   command: |
                       npm run build
 
+            - run:
+                  name: ls
+                  command: |
+                      ls -la
+
+
             - persist_to_workspace:
                   root: ~/repo
                   paths:
