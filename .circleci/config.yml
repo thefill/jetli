@@ -147,9 +147,11 @@ workflows:
             - setup:
                   <<: *defaultFilters
             - build-lint-test:
+                  <<: *defaultFilters
                   requires:
                       - setup
             - publish-coverage:
+                  <<: *defaultFilters
                   requires:
                       - build-lint-test
 
@@ -158,14 +160,18 @@ workflows:
             - setup:
                   <<: *releaseFilters
             - build-lint-test:
+                  <<: *releaseFilters
                   requires:
                       - setup
             - publish-coverage:
+                  <<: *releaseFilters
                   requires:
                       - build-lint-test
             - publish-documentation:
+                  <<: *releaseFilters
                   requires:
                       - build-lint-test
             - publish-package:
+                  <<: *releaseFilters
                   requires:
                       - build-lint-test
