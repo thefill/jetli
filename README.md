@@ -274,10 +274,6 @@ jetli.set('attack', AttackMock);
 const fighter2 = jetli.get('attack');
 fighter2.punch();</pre>
 
-## Documentation
-
-You can find full documentation [here](todo)
-
 [//]: # (Readme partial used by an markdown readme page)
 
 ## Documentation
