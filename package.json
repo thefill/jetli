@@ -1,6 +1,6 @@
 {
     "name": "jetli",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Dependency injector",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
@@ -27,7 +27,7 @@
         "docs:markdown-readme": "concat -o README.md BASE-README.md src/docs-partials/readme.markdown-documentation.md",
         "docs:api-readme": "concat -o API-README.md BASE-README.md src/docs-partials/readme.api-documentation.md",
         "docs:html": "typedoc --mode modules --exclude \"**/*+(index|.spec|.e2e).ts\" --tsconfig tsconfig.esm.json --hideGenerator --readme API-README.md --out docs/archive/$npm_package_version src",
-        "docs:postprocess": "run-s docs:html-style docs:html-script && cp -R docs/archive/$npm_package_version/* docs/",
+        "docs:postprocess": "run-s docs:html-style docs:html-script && cp -R docs/archive/$npm_package_version/* docs/ && touch docs/.nojekyll",
         "docs:html-style": "sed -i.bak -e '/main\\.css/r src/docs-partials/api-docs.style.html' -e '//N' docs/archive/$npm_package_version/index.html && rm docs/archive/$npm_package_version/index.html.bak",
         "docs:html-script": "sed -i.bak -e '/<\\/script>/r src/docs-partials/api-docs.script.html' -e '//N' docs/archive/$npm_package_version/index.html && rm docs/archive/$npm_package_version/index.html.bak",
         "clean": "run-p clean:build clean:docs clean:test",
