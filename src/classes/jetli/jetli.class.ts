@@ -152,7 +152,7 @@ export class Jetli implements IJetli {
             args: args
         };
         delete this.dependencies[key];
-        
+
         // if has init property and init is an callable method
         if (dependency.init && typeof dependency.init === 'function') {
             // initialise injectable
