@@ -1,0 +1,568 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>jetli</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- This styles partial should be included just before </head> tag for readme html page -->
+<style>
+    .title {
+        display: none;
+    }
+
+    div.tsd-page-title {
+        padding: 20px 0 20px 0;
+    }
+
+    .tsd-page-title .container {
+        display: none;
+    }
+
+    .runkit-wrapper.inactive {
+        position: relative;
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    .runkit-wrapper.inactive:before {
+        height: 38px;
+        width: 38px;
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        animation: 0.9s infinite linear rotatePreloader;
+        content: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPGRlZnM+ICAgICAgICA8bGluZWFyR3JhZGllbnQgeDE9IjguMDQyJSIgeTE9IjAlIiB4Mj0iNjUuNjgyJSIgeTI9IjIzLjg2NSUiIGlkPSJhIj4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjIyIiBzdG9wLW9wYWNpdHk9IjAiIG9mZnNldD0iMCUiLz4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjIyIiBzdG9wLW9wYWNpdHk9Ii42MzEiIG9mZnNldD0iNjMuMTQ2JSIvPiAgICAgICAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMyMjIiIG9mZnNldD0iMTAwJSIvPiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4gICAgPC9kZWZzPiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSI+ICAgICAgICAgICAgPHBhdGggZD0iTTM2IDE4YzAtOS45NC04LjA2LTE4LTE4LTE4IiBpZD0iT3ZhbC0yIiBzdHJva2U9InVybCgjYSkiIHN0cm9rZS13aWR0aD0iMiI+ICAgICAgICAgICAgPC9wYXRoPiAgICAgICAgICAgIDxjaXJjbGUgZmlsbD0iIzIyMiIgY3g9IjM2IiBjeT0iMTgiIHI9IjEiPiAgICAgICAgICAgIDwvY2lyY2xlPiAgICAgICAgPC9nPiAgICA8L2c+PC9zdmc+)
+    }
+
+    .runkit-wrapper {
+        background: unset;
+        padding: 0;
+        margin: 0;
+        padding-left: 25px;
+        font-family: unset;
+        font-size: unset;
+    }
+
+    @keyframes rotatePreloader {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">jetli</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> jetli</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="jetli">Jetli</h1>
+				<p>Simple, lightweight dependency injector - supports factories, classes and primitives.</p>
+				<p><a href="https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thefill/jetli&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/6129bd9a22f043a09e9cd89141d60176" alt="Code quality"></a>
+					<a href="https://www.codacy.com/app/fifofil/jetli?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thefill/jetli&amp;utm_campaign=Badge_Coverage"><img src="https://api.codacy.com/project/badge/Coverage/6129bd9a22f043a09e9cd89141d60176" alt="Coverage"></a>
+					<a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/thefill/jetli.svg" alt="Greenkeeper badge"></a>
+				<a href="https://circleci.com/gh/thefill/jetli"><img src="https://circleci.com/gh/thefill/jetli/tree/master.svg?style=shield" alt="CricleCi badge"></a></p>
+				<p><img src="https://img.shields.io/npm/v/jetli.svg" alt="npm version">
+					<a href="https://github.com/thefill/jetli/issues"><img src="https://img.shields.io/github/issues-raw/thefill/jetli.svg" alt="Open issues"></a>
+					<img src="https://img.shields.io/npm/types/jetli.svg" alt="Types: TypeScript">
+				<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
+				<h2 id="main-features">Main features</h2>
+				<ul>
+					<li>tiny &amp; easy to use: only 3 methods</li>
+					<li>delayed dependency initialisation</li>
+					<li>No peer dependencies</li>
+					<li>Typescript types included</li>
+					<li>exposes esm/cjs modules</li>
+					<li>always 100% test coverage</li>
+				</ul>
+				<h2 id="guide">Guide</h2>
+				<ul>
+					<li><a href="#installation" title="Installation">Installation</a></li>
+					<li><a href="#basicusage" title="Basic usage">Basic usage</a></li>
+					<li><a href="#advancedusage" title="Advanced usage">Advanced usage</a></li>
+					<li><a href="#documentation" title="Documentation">API documentation</a></li>
+				</ul>
+				<h2 id="installation">Installation</h2>
+				<pre>npm install --save jetli</pre>
+				<p>or</p>
+				<pre>yarn add jetli</pre>
+				<p>or</p>
+				<pre>pnpm --save jetli</pre>
+				<h2 id="basic-usage">Basic usage</h2>
+				<p>Jetli allows you to inject consistently classes, functions and primitives across whole application.</p>
+				<h3 id="inject-instantiate-class-via-get-method">Inject &amp; instantiate class via &#39;get&#39; method</h3>
+				<p>Injecting instances of classes is trivial with jetli - just use &#39;get&#39; method without any additional options.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class Attack {
+    constructor(){
+        this.id = Math.round(Math.random() * 100);
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+
+const fighter1 = jetli.get(Attack);
+const fighter2 = jetli.get(Attack);
+
+fighter1.punch();
+fighter2.punch();</pre>
+				<h3 id="inject-instantiate-class-via-set-and-retrieve-instance-via-get-methods">Inject &amp; instantiate class via &#39;set&#39; and retrieve instance via &#39;get&#39; methods</h3>
+				<p>Functions, already instantiated objects or primitive values like array, string and numbers can be injected via &#39;get&#39; method priory to registering them with jetli. </p>
+				<p>Registration is provided via &#39;set&#39; method and requires you to provide string token that identifies the injectable element.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class Attack {
+    constructor(){
+        this.id = Math.round(Math.random() * 100);
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+jetli.set('attack', Attack);
+
+const fighter1 = jetli.get('attack');
+const fighter2 = jetli.get('attack');
+
+fighter1.punch();
+fighter2.punch();</pre>
+				<h3 id="inject-primitives-via-id">Inject primitives via id</h3>
+				<p>As explained in previous example primitives can be easily used across your applications with associated string id provided during registration.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+const someNumber = 123;
+const someString = 'punch';
+const someArray = [123, 'punch'];
+
+jetli.set('number', someNumber);
+jetli.set('string', someString);
+jetli.set('array', someArray);
+
+const injectedNumber = jetli.get('number');
+console.log(injectedNumber);
+
+const injectedString = jetli.get('string');
+console.log(injectedString);
+
+const injectedArray = jetli.get('array');
+console.log(injectedArray);</pre>
+				<h3 id="create-initialisation-friendly-services">Create initialisation-friendly services</h3>
+				<p>To use Jetli to full extend implement services that expose init method. This method is the safest place to use Jelit injector inside injectable services.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+jetli.set('someNumber', 123);
+
+class JetliFriendlyService {
+    init(jetli){
+        this.id = jetli.get('someNumber');
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+
+const fighter1 = jetli.get(JetliFriendlyService);
+const fighter2 = jetli.get(JetliFriendlyService);
+
+fighter1.punch();
+fighter2.punch();</pre>
+				<h2 id="advanced-usage">Advanced usage</h2>
+				<h3 id="delay-initialisation-of-services-until-used-on-injection-request-">Delay initialisation of services until used (on injection request)</h3>
+				<p>Have enough of overhead when all those services initialises at once? Register them and request initialisation only when injection is requested.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class Attack {
+    constructor(){
+        this.id = Math.round(Math.random() * 100);
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+
+jetli.set('attack', Attack, false);
+console.log('No initialisation at this point');
+
+const fighter1 = jetli.get('attack');
+const fighter2 = jetli.get('attack');
+
+fighter1.punch();
+fighter2.punch();</pre>
+				<h3 id="pass-arguments-to-services-constructor">Pass arguments to services constructor</h3>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class Attack {
+    constructor(id){
+        this.id = id;
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+const externalId = Math.round(Math.random() * 100);
+jetli.set('attack', Attack, false, externalId);
+
+const fighter1 = jetli.get('attack');
+const fighter2 = jetli.get('attack');
+
+fighter1.punch();
+fighter2.punch();</pre>
+				<h3 id="inject-services-into-other-services-without-circular-dependency">Inject services into other services without circular dependency</h3>
+				<p>Jetli uses battle-tested method to fight &#39;cyclic dependencies&#39; - optional initialisation callback. Injector searches for optional init method to call it and as an argument to provide instance of injector itself. This method provide safe moment to inject all dependencies required by service - you can be sure that all dependencies will be already initialised.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class ServiceA {
+    init(jetli){
+        this.service = jetli.get(ServiceB);
+        this.id = this.service.getNumber();
+    }
+
+    getNumber(){
+        return 123;
+    }
+
+    getId(){
+        return this.id;
+    }
+}
+
+class ServiceB {
+    init(jetli){
+        this.service = jetli.get(ServiceA);
+        this.id = this.service.getNumber();
+    }
+
+    getNumber(){
+        return 456;
+    }
+
+    getId(){
+        return this.id;
+    }
+}
+
+const serviceA = jetli.get(ServiceA);
+const serviceB = jetli.get(ServiceB);
+
+serviceA.getId();
+serviceB.getId();</pre>
+				<h3 id="mock-services-for-test-purposes">Mock services for test purposes</h3>
+				<p>Its rather trivial to mock module dependencies if you have total control whats injected where, right? ith Jetli you can reset any previously registered/injected dependencies and introduce your own mocks / stubs.</p>
+				<pre class="runkit-source">const jetli = require('jetli').jetli;
+
+class Attack {
+    constructor(){
+        this.id = Math.round(Math.random() * 100);
+        console.log(`Attack no. ${this.id} ready!`);
+    }
+    punch(){
+        console.log(`Attack no. ${this.id} executed!`);
+    }
+}
+
+class AttackMock {
+    constructor(){
+        super();
+        console.log(`Attack mocked!`);
+    }
+    punch(){
+        super.punch();
+        console.log(`Mocked attack execution!`);
+    }
+}
+
+// somewhere in your code
+jetli.set('attack', Attack);
+
+const fighter1 = jetli.get('attack');
+fighter1.punch();
+
+// somewhere in your test
+jetli.unset('attack');
+jetli.set('attack', AttackMock);
+
+const fighter2 = jetli.get('attack');
+fighter2.punch();</pre>
+				<h2 id="documentation">Documentation</h2>
+				<p>Please use top search bar or right-side list of links to explore full API.</p>
+				<p>Archival API documentation:</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_classes_jetli_jetli_class_.html">"classes/jetli/jetli.class"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_interfaces_dependency_config_dependency_config_interface_.html">"interfaces/dependency-<wbr>config/dependency-<wbr>config.interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_interfaces_injection_injection_interface_.html">"interfaces/injection/injection.interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_interfaces_jetli_jetli_interface_.html">"interfaces/jetli/jetli.interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_jetli_jetli_service_.html">"services/jetli/jetli.service"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<!-- This script partial should be included just before </body> tag for readme html page -->
+<script>
+
+    initArchivalDocsList();
+    initRunkit();
+
+    // Convert code examples to the Runkit containers
+    function initRunkit() {
+        // setup runkit containers & listeners
+        setupRunkit();
+        setupRunkitListeners();
+
+        // add runkit script to the head
+        const src = document.createElement('script');
+        document.head.appendChild(src);
+        src.onload = () => {
+            const wrappers = Array.from(document.querySelectorAll('.runkit-wrapper.inactive'));
+            startSingleRunkitContainer(wrappers);
+        };
+        src.src = 'https://embed.runkit.com';
+    }
+
+    function setupRunkit() {
+        const codeSources = Array.from(document.getElementsByClassName('runkit-source'));
+
+        // For each container create loader and add it before
+        codeSources.forEach((source) => {
+            const initialHeight = source.clientHeight;
+            const code = source.innerText;
+
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('runkit-wrapper');
+            wrapper.classList.add('inactive');
+            wrapper.style.minHeight = `${initialHeight}px`;
+            wrapper.setAttribute('data-original-code', code);
+
+            // position containers
+            source.before(wrapper);
+
+            // remove original source
+            source.remove();
+        });
+    }
+
+    function startSingleRunkitContainer(wrappers) {
+
+        if (!wrappers.length) {
+            console.log('all containers started!');
+            return;
+        }
+        const wrapper = wrappers.shift();
+        console.log('container init');
+
+        const code = wrapper.dataset.originalCode;
+
+        // const source = node.innerText;
+        // wrapper.removeChild(node);
+        RunKit.createNotebook({
+            element: wrapper,
+            source: code,
+            //
+            // onload: () => {
+            //     console.log('container started!');
+            //     // on creation of container hide loader
+            //     // loader.remove();
+            //     // startSingleRunkitContainer(runkitContainers, runkitLoaders);
+            // },
+            onLoad: () => {
+                wrapper.classList.remove('inactive');
+                // start self-recurring initialisation
+                startSingleRunkitContainer(wrappers);
+            }
+        });
+    }
+
+    function setupRunkitListeners() {
+        // Handle resize of the document
+        window.addEventListener('message', function (e) {
+            if (e.origin !== 'https://runkit.com') {
+                return;
+            }
+
+            try {
+                var data = JSON.parse(e.data);
+            } catch (e) {
+                return false;
+            }
+
+            if (data.context !== 'iframe.resize') {
+                return false;
+            }
+
+            const iframe = document.querySelector('iframe[src="' + data.src + '"]');
+
+            if (!iframe) {
+                return false;
+            }
+
+            if (data.height) {
+                iframe.height = data.height;
+            }
+        });
+    }
+
+    async function initArchivalDocsList() {
+        const response = await fetch('https://api.github.com/repos/thefill/jetli/contents/archive?ref=gh-pages');
+        const data = await response.json();
+        let htmlString = '<ul>';
+        for (let file of data) {
+            htmlString += `<li><a href="${file.path}">API for Jetli v${file.name}</a></li>`;
+        }
+        htmlString += '</ul>';
+        document.querySelector('.tsd-panel.tsd-typography').innerHTML += htmlString;
+    }
+
+</script>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
