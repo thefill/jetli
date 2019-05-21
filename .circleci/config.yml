@@ -19,7 +19,7 @@ releaseFilters: &releaseFilters
 documentationFilters: &documentationFilters
     filters:
         tags:
-            only: /^docs/
+            only: /^docs-.*/
         branches:
             ignore:
                 - /.*/
@@ -32,7 +32,6 @@ defaultFilters: &defaultFilters
                 - /.*/
         branches:
             only:
-                - /feature-.*/
                 - /feature\/.*/
                 - master
 
