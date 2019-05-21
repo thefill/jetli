@@ -145,7 +145,7 @@ class Attack {
     }
 }
 
-jetli.set('attack', Attack, false);
+jetli.set('attack', Attack, true);
 console.log('No initialisation at this point');
 
 const fighter1 = jetli.get('attack');
@@ -236,7 +236,6 @@ class Attack {
 
 class AttackMock {
     constructor(){
-        super();
         console.log(`Attack mocked!`);
     }
     punch(){

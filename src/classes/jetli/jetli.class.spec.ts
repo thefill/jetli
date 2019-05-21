@@ -189,6 +189,52 @@ describe('Jetli class', () => {
         });
     });
 
+    it('should prevent circular dependency when classes inject via init method', () => {
+        // tslint:disable-next-line
+        class ServiceA implements IInjection {
+            protected service: ServiceB;
+            protected id: number;
+
+            public init(jetliInstance) {
+                this.service = jetliInstance.get(ServiceB);
+                this.id = this.service.getNumber();
+            }
+
+            public getNumber() {
+                return 123;
+            }
+
+            public getId() {
+                return this.id;
+            }
+        }
+
+        // tslint:disable-next-line
+        class ServiceB implements IInjection {
+            protected service: ServiceA;
+            protected id: number;
+
+            public init(jetliInstance) {
+                this.service = jetliInstance.get(ServiceA);
+                this.id = this.service.getNumber();
+            }
+
+            public getNumber() {
+                return 321;
+            }
+
+            public getId() {
+                return this.id;
+            }
+        }
+
+        const serviceA = jetli.get(ServiceA);
+        const serviceB = jetli.get(ServiceB);
+
+        expect(serviceA.getId()).toEqual(serviceB.getNumber());
+        expect(serviceB.getId()).toEqual(serviceA.getNumber());
+    });
+
     describe('should allow to retrieve dependency with string key via get method', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
             it(`for ${typeName}`, () => {
