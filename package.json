@@ -4,7 +4,7 @@
     "description": "Dependency injector",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
-    "typings": "dist/esm/index.d.ts",
+    "types": "dist/esm/index.d.ts",
     "scripts": {
         "// DEV SCRIPTS //": "-------------------------------------------------------",
         "watch": "npm-watch build",
