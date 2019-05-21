@@ -74,7 +74,9 @@ fighter2.punch();</pre>
 
 ### Inject & instantiate class via 'set' and retrieve instance via 'get' methods
 
-Functions, already instantiated objects or primitive values like array, string and numbers can be injected via 'get' method priory to registering them with jetli. Registration is provided via 'set' method and requires you to provide string token that identifies the injectable element.
+Functions, already instantiated objects or primitive values like array, string and numbers can be injected via 'get' method priory to registering them with jetli. 
+
+Registration is provided via 'set' method and requires you to provide string token that identifies the injectable element.
 
 <pre class="runkit-source">const jetli = require('jetli@0.0.6').jetli;
 
