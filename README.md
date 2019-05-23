@@ -22,7 +22,7 @@ Simple, lightweight dependency injector - supports factories, classes and primit
 
 *   tiny & easy to use: only 3 methods
 *   delayed dependency initialisation
-*   No peer dependencies
+*   No dependencies (for dist)
 *   Typescript types included
 *   exposes esm/cjs modules
 *   always 100% test coverage
