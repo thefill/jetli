@@ -33,7 +33,7 @@ export class Jetli implements IJetli {
      * Register dependency (also primitive values) by key - will be initialised
      * immediately if initialise set to true.
      * @param {string} key
-     * @param {{new(): (IInjection | T)}} Dependency
+     * @param {{new(): (IInjection | T)}} dependency
      * @param {boolean} initialiseOnRequest Should Jetli initialise immediately,
      *                                          or delay till injection requested
      * @param constructorArgs {...any} Arguments that should be passed to dependency
@@ -41,7 +41,7 @@ export class Jetli implements IJetli {
      */
     public set<T = any>(
         key: string,
-        Dependency: new () => IInjection | T,
+        dependency: new (...args) => IInjection | T,
         initialiseOnRequest = true,
         ...constructorArgs
     ): void {
@@ -52,12 +52,12 @@ export class Jetli implements IJetli {
             throw new Error(`Injectable with key ${key} already set`);
         }
 
-        if (typeof Dependency === 'undefined') {
+        if (typeof dependency === 'undefined') {
             throw new Error(`Provided dependency has value of undefined`);
         }
 
         this.dependencies[key] = {
-            dependency: Dependency,
+            dependency: dependency,
             args: constructorArgs
         };
 
@@ -81,21 +81,21 @@ export class Jetli implements IJetli {
 
     /**
      * Retrieve injection by its class / constructor or key
-     * @param {{new(): (IInjection | T)} | string} Dependency
+     * @param {{new(): (IInjection | T)} | string} dependency
      * @returns {T}
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
      */
     public get<T = any>(
-        Dependency: (new () => IInjection | T) | string,
+        dependency: (new (...args) => IInjection | T) | string,
         ...constructorArgs
     ): T {
-        if (typeof Dependency === 'string') {
-            return this.initialiseDependency<T>(Dependency);
+        if (typeof dependency === 'string') {
+            return this.initialiseDependency<T>(dependency);
         }
 
         // Allow to retrieve dependency via 'get' using only constructors.
-        if (!Jetli.isConstructor(Dependency) || !Dependency.name) {
+        if (!Jetli.isConstructor(dependency) || !dependency.name) {
             throw new Error(`
                 Provided dependency not an constructor. 
                 To inject primitive values register them using 'set' method first.
@@ -103,7 +103,7 @@ export class Jetli implements IJetli {
         }
 
         // Use constructor name as key
-        const key = Dependency.name;
+        const key = dependency.name;
 
         // if not in store add
         if (
@@ -111,7 +111,7 @@ export class Jetli implements IJetli {
             !Jetli.inStore(this.initialisedDependencies, key)
         ) {
             this.dependencies[key] = {
-                dependency: Dependency,
+                dependency: dependency,
                 args: constructorArgs
             };
         }
@@ -138,30 +138,30 @@ export class Jetli implements IJetli {
         }
 
         // if registered but not initialised do that now
-        const Dependency = this.dependencies[key].dependency;
+        const dependency = this.dependencies[key].dependency;
         const args = this.dependencies[key].args;
-        let dependency;
-        if (Jetli.isConstructor(Dependency)) {
-            dependency = new Dependency(...args);
+        let finalDependency;
+        if (Jetli.isConstructor(dependency)) {
+            finalDependency = new dependency(...args);
         } else {
-            dependency = Dependency;
+            finalDependency = dependency;
         }
 
         this.initialisedDependencies[key] = {
-            dependency: dependency,
+            dependency: finalDependency,
             args: args
         };
         delete this.dependencies[key];
 
         // if has init property and init is an callable method
-        if (dependency.init && typeof dependency.init === 'function') {
+        if (finalDependency.init && typeof finalDependency.init === 'function') {
             // if not initialised yet
-            if (typeof dependency.initialised === undefined || !dependency.initialised) {
+            if (typeof finalDependency.initialised === undefined || !finalDependency.initialised) {
                 // initialise injectable
-                dependency.init(this);
+                finalDependency.init(this);
             }
         }
 
-        return dependency;
+        return finalDependency;
     }
 }
