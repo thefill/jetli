@@ -48,14 +48,14 @@ const functionMock = function () {
     return functionValue;
 };
 
-const primitiveTypes = {
+const primitiveTypes: { [key: string]: number | string | any[] | object } = {
     number: 123,
     string: 'abc',
     array: [1, 2, 3],
     object: {a: 1, b: 2}
 };
 
-const constructorTypes = {
+const constructorTypes: { [key: string]: ((...args: any) => any) | any } = {
     'class': ClassConstructorMock,
     'uninitialised injection': UninitialisedInjectionConstructorMock,
     'initialised injection': InitialisedInjectionConstructorMock,
