@@ -6,6 +6,58 @@
 	<title>jetli</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- This styles partial should be included just before </head> tag for readme html page -->
+<style>
+    .title {
+        display: none;
+    }
+
+    div.tsd-page-title {
+        padding: 20px 0 20px 0;
+    }
+
+    .tsd-page-title .container {
+        display: none;
+    }
+
+    .runkit-wrapper.inactive {
+        position: relative;
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    .runkit-wrapper.inactive:before {
+        height: 38px;
+        width: 38px;
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        animation: 0.9s infinite linear rotatePreloader;
+        content: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPGRlZnM+ICAgICAgICA8bGluZWFyR3JhZGllbnQgeDE9IjguMDQyJSIgeTE9IjAlIiB4Mj0iNjUuNjgyJSIgeTI9IjIzLjg2NSUiIGlkPSJhIj4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjIyIiBzdG9wLW9wYWNpdHk9IjAiIG9mZnNldD0iMCUiLz4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMjIyIiBzdG9wLW9wYWNpdHk9Ii42MzEiIG9mZnNldD0iNjMuMTQ2JSIvPiAgICAgICAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMyMjIiIG9mZnNldD0iMTAwJSIvPiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4gICAgPC9kZWZzPiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMSAxKSI+ICAgICAgICAgICAgPHBhdGggZD0iTTM2IDE4YzAtOS45NC04LjA2LTE4LTE4LTE4IiBpZD0iT3ZhbC0yIiBzdHJva2U9InVybCgjYSkiIHN0cm9rZS13aWR0aD0iMiI+ICAgICAgICAgICAgPC9wYXRoPiAgICAgICAgICAgIDxjaXJjbGUgZmlsbD0iIzIyMiIgY3g9IjM2IiBjeT0iMTgiIHI9IjEiPiAgICAgICAgICAgIDwvY2lyY2xlPiAgICAgICAgPC9nPiAgICA8L2c+PC9zdmc+)
+    }
+
+    .runkit-wrapper {
+        background: unset;
+        padding: 0;
+        margin: 0;
+        padding-left: 25px;
+        font-family: unset;
+        font-size: unset;
+    }
+
+    @keyframes rotatePreloader {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
@@ -299,7 +351,8 @@ jetli.set('attack', AttackMock);
 const fighter2 = jetli.get('attack');
 fighter2.punch();</pre>
 				<h2 id="documentation">Documentation</h2>
-				<p>Full API documentation for this package can be found <a href="https://thefill.github.io/jetli" title="API documentations for the package">here</a></p>
+				<p>Please use top search bar or right-side list of links to explore full API.</p>
+				<p>Archival API documentation:</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -393,6 +446,122 @@ fighter2.punch();</pre>
 </footer>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
+<!-- This script partial should be included just before </body> tag for readme html page -->
+<script>
+
+    initArchivalDocsList();
+    initRunkit();
+
+    // Convert code examples to the Runkit containers
+    function initRunkit() {
+        // setup runkit containers & listeners
+        setupRunkit();
+        setupRunkitListeners();
+
+        // add runkit script to the head
+        const src = document.createElement('script');
+        document.head.appendChild(src);
+        src.onload = () => {
+            const wrappers = Array.from(document.querySelectorAll('.runkit-wrapper.inactive'));
+            startSingleRunkitContainer(wrappers);
+        };
+        src.src = 'https://embed.runkit.com';
+    }
+
+    function setupRunkit() {
+        const codeSources = Array.from(document.getElementsByClassName('runkit-source'));
+
+        // For each container create loader and add it before
+        codeSources.forEach((source) => {
+            const initialHeight = source.clientHeight;
+            const code = source.innerText;
+
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('runkit-wrapper');
+            wrapper.classList.add('inactive');
+            wrapper.style.minHeight = `${initialHeight}px`;
+            wrapper.setAttribute('data-original-code', code);
+
+            // position containers
+            source.before(wrapper);
+
+            // remove original source
+            source.remove();
+        });
+    }
+
+    function startSingleRunkitContainer(wrappers) {
+
+        if (!wrappers.length) {
+            console.log('all containers started!');
+            return;
+        }
+        const wrapper = wrappers.shift();
+        console.log('container init');
+
+        const code = wrapper.dataset.originalCode;
+
+        // const source = node.innerText;
+        // wrapper.removeChild(node);
+        RunKit.createNotebook({
+            element: wrapper,
+            source: code,
+            //
+            // onload: () => {
+            //     console.log('container started!');
+            //     // on creation of container hide loader
+            //     // loader.remove();
+            //     // startSingleRunkitContainer(runkitContainers, runkitLoaders);
+            // },
+            onLoad: () => {
+                wrapper.classList.remove('inactive');
+                // start self-recurring initialisation
+                startSingleRunkitContainer(wrappers);
+            }
+        });
+    }
+
+    function setupRunkitListeners() {
+        // Handle resize of the document
+        window.addEventListener('message', function (e) {
+            if (e.origin !== 'https://runkit.com') {
+                return;
+            }
+
+            try {
+                var data = JSON.parse(e.data);
+            } catch (e) {
+                return false;
+            }
+
+            if (data.context !== 'iframe.resize') {
+                return false;
+            }
+
+            const iframe = document.querySelector('iframe[src="' + data.src + '"]');
+
+            if (!iframe) {
+                return false;
+            }
+
+            if (data.height) {
+                iframe.height = data.height;
+            }
+        });
+    }
+
+    async function initArchivalDocsList() {
+        const response = await fetch('https://api.github.com/repos/thefill/jetli/contents/archive?ref=gh-pages');
+        const data = await response.json();
+        let htmlString = '<ul>';
+        for (let file of data) {
+            htmlString += `<li><a href="${file.path}">API for Jetli v${file.name}</a></li>`;
+        }
+        htmlString += '</ul>';
+        document.querySelector('.tsd-panel.tsd-typography').innerHTML += htmlString;
+    }
+
+</script>
 <script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
