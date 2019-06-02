@@ -155,8 +155,11 @@ export class Jetli implements IJetli {
 
         // if has init property and init is an callable method
         if (dependency.init && typeof dependency.init === 'function') {
-            // initialise injectable
-            dependency.init(this);
+            // if not initialised yet
+            if (typeof dependency.initialised === undefined || !dependency.initialised) {
+                // initialise injectable
+                dependency.init(this);
+            }
         }
 
         return dependency;
