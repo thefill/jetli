@@ -152,7 +152,7 @@
 				<p>Jetli allows you to inject consistently classes, functions and primitives across whole application.</p>
 				<h3 id="inject-instantiate-class-via-get-method">Inject &amp; instantiate class via &#39;get&#39; method</h3>
 				<p>Injecting instances of classes is trivial with jetli - just use &#39;get&#39; method without any additional options.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class Attack {
     constructor(){
@@ -172,7 +172,7 @@ fighter2.punch();</pre>
 				<h3 id="inject-instantiate-class-via-set-and-retrieve-instance-via-get-methods">Inject &amp; instantiate class via &#39;set&#39; and retrieve instance via &#39;get&#39; methods</h3>
 				<p>Functions, already instantiated objects or primitive values like array, string and numbers can be injected via &#39;get&#39; method priory to registering them with jetli. </p>
 				<p>Registration is provided via &#39;set&#39; method and requires you to provide string token that identifies the injectable element.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class Attack {
     constructor(){
@@ -192,7 +192,7 @@ fighter1.punch();
 fighter2.punch();</pre>
 				<h3 id="inject-primitives-via-id">Inject primitives via id</h3>
 				<p>As explained in previous example primitives can be easily used across your applications with associated string id provided during registration.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 const someNumber = 123;
 const someString = 'punch';
@@ -212,7 +212,7 @@ const injectedArray = jetli.get('array');
 console.log(injectedArray);</pre>
 				<h3 id="create-initialisation-friendly-services">Create initialisation-friendly services</h3>
 				<p>To use Jetli to full extend implement services that expose init method. This method is the safest place to use Jelit injector inside injectable services.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 jetli.set('someNumber', 123);
 
@@ -235,7 +235,7 @@ fighter2.punch();</pre>
 				<h2 id="advanced-usage">Advanced usage</h2>
 				<h3 id="delay-initialisation-of-services-until-used-on-injection-request-">Delay initialisation of services until used (on injection request)</h3>
 				<p>Have enough of overhead when all those services initialises at once? Register them and request initialisation only when injection is requested.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class Attack {
     constructor(){
@@ -256,7 +256,7 @@ const fighter2 = jetli.get('attack');
 fighter1.punch();
 fighter2.punch();</pre>
 				<h3 id="pass-arguments-to-services-constructor">Pass arguments to services constructor</h3>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class Attack {
     constructor(id){
@@ -277,7 +277,7 @@ fighter1.punch();
 fighter2.punch();</pre>
 				<h3 id="inject-services-into-other-services-without-circular-dependency">Inject services into other services without circular dependency</h3>
 				<p>Jetli uses battle-tested method to fight &#39;cyclic dependencies&#39; - optional initialisation callback. Injector searches for optional init method to call it and as an argument to provide instance of injector itself. This method provide safe moment to inject all dependencies required by service - you can be sure that all dependencies will be already initialised.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class ServiceA {
     init(jetli){
@@ -316,7 +316,7 @@ serviceA.getId();
 serviceB.getId();</pre>
 				<h3 id="mock-services-for-test-purposes">Mock services for test purposes</h3>
 				<p>Its rather trivial to mock module dependencies if you have total control whats injected where, right? ith Jetli you can reset any previously registered/injected dependencies and introduce your own mocks / stubs.</p>
-				<pre class="runkit-source">const jetli = require('jetli').jetli;
+				<pre class="runkit-source">const jetli = require('jetli').jetli@1.0.2;
 
 class Attack {
     constructor(){
