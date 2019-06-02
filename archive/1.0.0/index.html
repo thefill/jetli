@@ -312,8 +312,8 @@ class ServiceB {
 const serviceA = jetli.get(ServiceA);
 const serviceB = jetli.get(ServiceB);
 
-serviceA.getId();
-serviceB.getId();</pre>
+console.log(serviceA.getId());
+console.log(serviceB.getId());</pre>
 				<h3 id="mock-services-for-test-purposes">Mock services for test purposes</h3>
 				<p>Its rather trivial to mock module dependencies if you have total control whats injected where, right? ith Jetli you can reset any previously registered/injected dependencies and introduce your own mocks / stubs.</p>
 				<pre class="runkit-source">const jetli = require('jetli@1.0.0').jetli;
@@ -334,7 +334,6 @@ class AttackMock {
         console.log(`Attack mocked!`);
     }
     punch(){
-        super.punch();
         console.log(`Mocked attack execution!`);
     }
 }

@@ -251,8 +251,8 @@ class ServiceB {
 const serviceA = jetli.get(ServiceA);
 const serviceB = jetli.get(ServiceB);
 
-serviceA.getId();
-serviceB.getId();</pre>
+console.log(serviceA.getId());
+console.log(serviceB.getId());</pre>
 
     <h3>Mock services for test purposes</h3>
     Its rather trivial to mock module dependencies if you have total control whats injected where, right?
@@ -275,7 +275,6 @@ class AttackMock {
         console.log(`Attack mocked!`);
     }
     punch(){
-        super.punch();
         console.log(`Mocked attack execution!`);
     }
 }

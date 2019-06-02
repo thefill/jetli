@@ -215,8 +215,8 @@ class ServiceB {
 const serviceA = jetli.get(ServiceA);
 const serviceB = jetli.get(ServiceB);
 
-serviceA.getId();
-serviceB.getId();</pre>
+console.log(serviceA.getId());
+console.log(serviceB.getId());</pre>
 
 ### Mock services for test purposes
 
@@ -240,7 +240,6 @@ class AttackMock {
         console.log(`Attack mocked!`);
     }
     punch(){
-        super.punch();
         console.log(`Mocked attack execution!`);
     }
 }
