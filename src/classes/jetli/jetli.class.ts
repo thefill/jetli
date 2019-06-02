@@ -1,4 +1,4 @@
-import {IDependencyConfig, IInjection, IJetli} from '../../interfaces';
+import {IDependency, IDependencyConfig, IJetli} from '../../interfaces';
 
 /**
  * Main class for dependency injector.
@@ -33,7 +33,7 @@ export class Jetli implements IJetli {
      * Register dependency (also primitive values) by key - will be initialised
      * immediately if initialise set to true.
      * @param {string} key
-     * @param {{new(): (IInjection | T)}} dependency
+     * @param {IDependency} dependency
      * @param {boolean} initialiseOnRequest Should Jetli initialise immediately,
      *                                          or delay till injection requested
      * @param constructorArgs {...any} Arguments that should be passed to dependency
@@ -41,7 +41,7 @@ export class Jetli implements IJetli {
      */
     public async set<T = any>(
         key: string,
-        dependency: new (...args) => IInjection | T,
+        dependency: IDependency,
         initialiseOnRequest = true,
         ...constructorArgs
     ): Promise<void> {
@@ -80,13 +80,13 @@ export class Jetli implements IJetli {
 
     /**
      * Retrieve injection by its class / constructor or key
-     * @param {{new(): (IInjection | T)} | string} dependency
+     * @param {IDependency | string} dependency
      * @returns {T}
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
      */
     public async get<T = any>(
-        dependency: (new (...args) => IInjection | T) | string,
+        dependency: IDependency | string,
         ...constructorArgs
     ): Promise<T> {
         if (typeof dependency === 'string') {
