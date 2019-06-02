@@ -9,9 +9,9 @@ export interface IJetli {
         Dependency: new () => IInjection | T,
         initialiseOnRequest: boolean,
         ...constructorArgs
-    ) => void;
+    ) => Promise<void>;
     get: <T = any>(
         Dependency: (new () => IInjection | T) | string,
         ...constructorArgs
-    ) => T;
+    ) => Promise<T>;
 }

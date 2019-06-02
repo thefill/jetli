@@ -39,12 +39,12 @@ export class Jetli implements IJetli {
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
      */
-    public set<T = any>(
+    public async set<T = any>(
         key: string,
         dependency: new (...args) => IInjection | T,
         initialiseOnRequest = true,
         ...constructorArgs
-    ): void {
+    ): Promise<void> {
         if (
             Jetli.inStore(this.dependencies, key) ||
             Jetli.inStore(this.initialisedDependencies, key)
@@ -63,8 +63,7 @@ export class Jetli implements IJetli {
 
         // if required immediate initialisation
         if (!initialiseOnRequest) {
-            this.initialiseDependency<T>(key);
-            return;
+            await this.initialiseDependency<T>(key);
         }
     }
 
@@ -86,10 +85,10 @@ export class Jetli implements IJetli {
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
      */
-    public get<T = any>(
+    public async get<T = any>(
         dependency: (new (...args) => IInjection | T) | string,
         ...constructorArgs
-    ): T {
+    ): Promise<T> {
         if (typeof dependency === 'string') {
             return this.initialiseDependency<T>(dependency);
         }
@@ -125,7 +124,7 @@ export class Jetli implements IJetli {
      * @param {string} key
      * @returns {T}
      */
-    protected initialiseDependency<T = any>(key: string): T {
+    protected async initialiseDependency<T = any>(key: string): Promise<T> {
         if (
             !Jetli.inStore(this.dependencies, key) &&
             !Jetli.inStore(this.initialisedDependencies, key)
@@ -140,6 +139,7 @@ export class Jetli implements IJetli {
         // if registered but not initialised do that now
         const dependency = this.dependencies[key].dependency;
         const args = this.dependencies[key].args;
+
         let finalDependency;
         if (Jetli.isConstructor(dependency)) {
             finalDependency = new dependency(...args);
@@ -157,8 +157,12 @@ export class Jetli implements IJetli {
         if (finalDependency.init && typeof finalDependency.init === 'function') {
             // if not initialised yet
             if (typeof finalDependency.initialised === undefined || !finalDependency.initialised) {
-                // initialise injectable
-                finalDependency.init(this);
+                try {
+                    // initialise injectable
+                    await finalDependency.init(this);
+                } catch (error) {
+                    throw new Error(`Error while initialising dependency for key ${key}.`);
+                }
             }
         }
 

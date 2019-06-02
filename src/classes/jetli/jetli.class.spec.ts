@@ -6,7 +6,9 @@ import Mock = jest.Mock;
 // Create injection constructor mock
 const uninitialisedInjectionMock: IInjection = {
     initialised: false,
-    init: jest.fn()
+    init: jest.fn(() => {
+        return Promise.resolve();
+    })
 };
 
 class UninitialisedInjectionConstructorMock {
@@ -17,7 +19,9 @@ class UninitialisedInjectionConstructorMock {
 
 const initialisedInjectionMock: IInjection = {
     initialised: true,
-    init: jest.fn()
+    init: jest.fn(() => {
+        return Promise.resolve();
+    })
 };
 
 // tslint:disable-next-line
@@ -106,19 +110,19 @@ describe('Jetli class', () => {
 
     describe('should allow to set any type of dependency via set method', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
-            it(typeName, () => {
+            it(typeName, async () => {
                 const dependency = primitiveTypes[typeName];
-                jetli.set(typeName, dependency);
-                const retrievedDependency = jetli.get(typeName);
+                await jetli.set(typeName, dependency);
+                const retrievedDependency = await jetli.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
         });
         Object.keys(constructorTypes).forEach((typeName) => {
-            it(typeName, () => {
+            it(typeName, async () => {
                 const dependency = constructorTypes[typeName];
-                jetli.set(typeName, dependency);
-                const retrievedDependency = jetli.get(typeName);
+                await jetli.set(typeName, dependency);
+                const retrievedDependency = await jetli.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -129,24 +133,24 @@ describe('Jetli class', () => {
 
     describe('should throw error for multiple dependency registrations via set method', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
-            it(typeName, () => {
+            it(typeName, async () => {
                 const dependency = primitiveTypes[typeName];
-                jetli.set(typeName, dependency);
+                await jetli.set(typeName, dependency);
 
                 try {
-                    jetli.set(typeName, dependency);
+                    await jetli.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
             });
         });
         Object.keys(constructorTypes).forEach((typeName) => {
-            it(typeName, () => {
+            it(typeName, async () => {
                 const dependency = constructorTypes[typeName];
-                jetli.set(typeName, dependency);
+                await jetli.set(typeName, dependency);
 
                 try {
-                    jetli.set(typeName, dependency);
+                    await jetli.set(typeName, dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -156,9 +160,9 @@ describe('Jetli class', () => {
 
     describe('should not initialise constructor by default via set method', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                jetli.set(typeName, dependency);
+                await jetli.set(typeName, dependency);
 
                 expect(dependency).not.toBeCalled();
             });
@@ -167,9 +171,9 @@ describe('Jetli class', () => {
 
     describe('should initialise constructor via set method', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                jetli.set(typeName, dependency, false);
+                await jetli.set(typeName, dependency, false);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -178,12 +182,12 @@ describe('Jetli class', () => {
 
     describe('should initialise constructor once via set method', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                jetli.set(typeName, dependency, false);
-                jetli.get(typeName);
-                jetli.get(typeName);
-                jetli.get(typeName);
+                await jetli.set(typeName, dependency, false);
+                await jetli.get(typeName);
+                await jetli.get(typeName);
+                await jetli.get(typeName);
 
                 expect(dependency).toBeCalledTimes(1);
             });
@@ -192,27 +196,29 @@ describe('Jetli class', () => {
 
     describe('should initialise constructor with correct arguments via set method', () => {
         Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const argument1 = 'abc';
                 const argument2 = 123;
                 const argument3 = [1, 2, 3];
                 const dependency: Mock = stubbedConstructorTypes[typeName];
-                jetli.set(typeName, dependency, false, argument1, argument2, argument3);
+                await jetli.set(typeName, dependency, false, argument1, argument2, argument3);
 
                 expect(dependency).toBeCalledWith(argument1, argument2, argument3);
             });
         });
     });
 
-    it('should prevent circular dependency when classes inject via init method', () => {
+    it('should prevent circular dependency when classes inject via init method', async () => {
         // tslint:disable-next-line
         class ServiceA implements IInjection {
             protected service: ServiceB;
             protected id: number;
 
-            public init(jetliInstance) {
-                this.service = jetliInstance.get(ServiceB);
+            public async init(jetliInstance) {
+                this.service = await jetliInstance.get(ServiceB);
                 this.id = this.service.getNumber();
+
+                return Promise.resolve();
             }
 
             public getNumber() {
@@ -229,9 +235,11 @@ describe('Jetli class', () => {
             protected service: ServiceA;
             protected id: number;
 
-            public init(jetliInstance) {
-                this.service = jetliInstance.get(ServiceA);
+            public async init(jetliInstance) {
+                this.service = await jetliInstance.get(ServiceA);
                 this.id = this.service.getNumber();
+
+                return Promise.resolve();
             }
 
             public getNumber() {
@@ -243,14 +251,14 @@ describe('Jetli class', () => {
             }
         }
 
-        const serviceA = jetli.get(ServiceA);
-        const serviceB = jetli.get(ServiceB);
+        const serviceA = await jetli.get(ServiceA);
+        const serviceB = await jetli.get(ServiceB);
 
         expect(serviceA.getId()).toEqual(serviceB.getNumber());
         expect(serviceB.getId()).toEqual(serviceA.getNumber());
     });
 
-    it('should execute init method if method exists', () => {
+    it('should execute init method if method exists', async () => {
         // tslint:disable-next-line
         class ServiceA implements IInjection {
             public initialised = false;
@@ -258,17 +266,19 @@ describe('Jetli class', () => {
 
             public init = jest.fn(() => {
                 this.id = 456;
+
+                return Promise.resolve();
             });
         }
 
-        const serviceA = jetli.get(ServiceA);
+        const serviceA = await jetli.get(ServiceA);
 
         expect(serviceA.init).toHaveBeenCalledTimes(1);
         expect(serviceA.init).toHaveBeenCalledWith(jetli);
         expect(serviceA.id).toEqual(456);
     });
 
-    it('should not execute init method if method exists but already initialised', () => {
+    it('should not execute init method if method exists but already initialised', async () => {
         // tslint:disable-next-line
         class ServiceA implements IInjection {
             public initialised = true;
@@ -276,26 +286,30 @@ describe('Jetli class', () => {
 
             public init = jest.fn(() => {
                 this.id = 456;
+
+                return Promise.resolve();
             });
         }
 
-        const serviceA = jetli.get(ServiceA);
+        const serviceA = await jetli.get(ServiceA);
 
         expect(serviceA.init).not.toBeCalled();
         expect(serviceA.id).toEqual(123);
     });
 
-    it('should execute init method if method exists and initialisation property not defined', () => {
+    it('should execute init method if method exists and initialisation property not defined', async () => {
         // tslint:disable-next-line
         class ServiceA implements IInjection {
             public id = 123;
 
             public init = jest.fn(() => {
                 this.id = 456;
+
+                return Promise.resolve();
             });
         }
 
-        const serviceA = jetli.get(ServiceA);
+        const serviceA = await jetli.get(ServiceA);
 
         expect(serviceA.init).toHaveBeenCalledTimes(1);
         expect(serviceA.init).toHaveBeenCalledWith(jetli);
@@ -304,19 +318,19 @@ describe('Jetli class', () => {
 
     describe('should allow to retrieve dependency with string key via get method', () => {
         Object.keys(primitiveTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency = primitiveTypes[typeName];
-                jetli.set(typeName, dependency);
-                const retrievedDependency = jetli.get(typeName);
+                await jetli.set(typeName, dependency);
+                const retrievedDependency = await jetli.get(typeName);
 
                 expect(retrievedDependency).toEqual(dependency);
             });
         });
         Object.keys(constructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency = constructorTypes[typeName];
-                jetli.set(typeName, dependency);
-                const retrievedDependency = jetli.get(typeName);
+                await jetli.set(typeName, dependency);
+                const retrievedDependency = await jetli.get(typeName);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -327,9 +341,9 @@ describe('Jetli class', () => {
 
     describe('should allow to retrieve dependency with constructor via get method', () => {
         Object.keys(constructorTypes).forEach((typeName) => {
-            it(`for ${typeName}`, () => {
+            it(`for ${typeName}`, async () => {
                 const dependency = constructorTypes[typeName];
-                const retrievedDependency = jetli.get(dependency);
+                const retrievedDependency = await jetli.get(dependency);
                 const expectedDerivative = constructorTypeDerivatives[typeName];
 
                 expect(retrievedDependency).not.toEqual(dependency);
@@ -339,69 +353,141 @@ describe('Jetli class', () => {
     });
 
     describe('should unset dependency', () => {
-        it(`for string key`, () => {
-            Object.keys(constructorTypes).forEach((typeName) => {
-                const dependency = constructorTypes[typeName];
-                jetli.set(typeName, dependency);
-                jetli.unset(typeName);
+        Object.keys(constructorTypes).forEach((typeName) => {
+            describe(`for string key`, () => {
+                it(`for ${typeName}`, async () => {
+                    const dependency = constructorTypes[typeName];
+                    await jetli.set(typeName, dependency);
+                    jetli.unset(typeName);
 
-                try {
-                    jetli.get(typeName);
-                } catch (error) {
-                    expect(error).toBeTruthy();
-                }
+                    try {
+                        await jetli.get(typeName);
+                    } catch (error) {
+                        expect(error).toBeTruthy();
+                    }
+                });
             });
         });
     });
 
-    describe('should throw error for requesting unset dependency via get method', () => {
-        it(`for string key`, () => {
-            Object.keys(constructorTypes).forEach((typeName) => {
-                const dependency = constructorTypes[typeName];
-                jetli.set(typeName, dependency);
-                jetli.unset(typeName);
+    describe('should throw error when init method fails for injectable', () => {
+
+        describe('when initialisation set as immediate', () => {
+
+            it('for set method', async () => {
+                // tslint:disable-next-line
+                class ServiceA implements IInjection {
+                    public initialised = false;
+
+                    public init = jest.fn(() => {
+                        return Promise.reject();
+                    });
+                }
 
                 try {
-                    jetli.get(typeName);
+                    await jetli.set('some-id', ServiceA, false);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
+            });
+
+            it('for get method', async () => {
+                // tslint:disable-next-line
+                class ServiceA implements IInjection {
+                    public initialised = false;
+
+                    public init = jest.fn(() => {
+                        return Promise.reject();
+                    });
+                }
+
+                try {
+                    const serviceA = await jetli.get(ServiceA);
+                } catch (error) {
+                    expect(error).toBeTruthy();
+                }
+            });
+
+        });
+
+        it('when initialisation delayed till request', async () => {
+            // tslint:disable-next-line
+            class ServiceA implements IInjection {
+                public initialised = false;
+
+                public init = jest.fn(() => {
+                    return Promise.reject();
+                });
+            }
+
+            try {
+                await jetli.set('some-id', ServiceA);
+            } catch (error) {
+                expect(error).toBeFalsy();
+            }
+
+            try {
+                const serviceA = await jetli.get('some-id');
+            } catch (error) {
+                expect(error).toBeTruthy();
+            }
+        });
+    });
+
+    describe('should throw error for requesting unset dependency via get method', () => {
+        Object.keys(constructorTypes).forEach((typeName) => {
+            describe(`for string key`, () => {
+                it(`for ${typeName}`, async () => {
+                    const dependency = constructorTypes[typeName];
+                    await jetli.set(typeName, dependency);
+                    jetli.unset(typeName);
+
+                    try {
+                        await jetli.get(typeName);
+                    } catch (error) {
+                        expect(error).toBeTruthy();
+                    }
+                });
             });
         });
     });
 
     describe('should throw error for requesting unregistered dependency via get method', () => {
-        it(`for string key`, () => {
+        describe(`for string key`, () => {
             Object.keys(constructorTypes).forEach((typeName) => {
-                const dependency = constructorTypes[typeName];
+                it(`for ${typeName}`, async () => {
+                    const dependency = constructorTypes[typeName];
 
-                try {
-                    jetli.get(typeName);
-                } catch (error) {
-                    expect(error).toBeTruthy();
-                }
+                    try {
+                        await jetli.get(typeName);
+                    } catch (error) {
+                        expect(error).toBeTruthy();
+                    }
+                });
             });
         });
-        it(`for constructor key`, () => {
+        describe(`for constructor key`, () => {
             Object.keys(constructorTypes).forEach((typeName) => {
-                const dependency = constructorTypes[typeName];
+                it(`for ${typeName}`, async () => {
+                    const dependency = constructorTypes[typeName];
 
-                try {
-                    jetli.get(dependency);
-                } catch (error) {
-                    expect(error).toBeTruthy();
-                }
+                    try {
+                        await jetli.get(dependency);
+                    } catch (error) {
+                        expect(error).toBeTruthy();
+                    }
+                });
             });
         });
     });
 
     describe('should throw error for requesting unregistered dependency via set method', () => {
         Object.keys(undefinedDependencies).forEach((typeName) => {
-            it(`for ${typeName} dependency`, () => {
+            it(`for ${typeName} dependency`, async () => {
                 const dependency = constructorTypes[typeName];
 
                 try {
-                    jetli.set('someType', dependency);
+                    await jetli.set('someType', dependency);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -411,11 +497,11 @@ describe('Jetli class', () => {
 
     describe('should throw error for requesting dependency with invalid identificator via get method', () => {
         Object.keys(invalidDependencyIdentificators).forEach((typeName) => {
-            it(`for ${typeName} dependency`, () => {
+            it(`for ${typeName} dependency`, async () => {
                 const identificator = invalidDependencyIdentificators[typeName];
 
                 try {
-                    jetli.get(identificator);
+                    await jetli.get(identificator);
                 } catch (error) {
                     expect(error).toBeTruthy();
                 }
@@ -426,22 +512,22 @@ describe('Jetli class', () => {
     describe('should initialise constructor via get method', () => {
         describe('for string key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    jetli.set(typeName, dependency);
+                    await jetli.set(typeName, dependency);
                     expect(dependency).not.toBeCalled();
 
-                    jetli.get(typeName);
+                    await jetli.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
         });
         describe('for constructor key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    jetli.get(dependency);
+                    await jetli.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -451,25 +537,25 @@ describe('Jetli class', () => {
     describe('should initialise constructor once via get method', () => {
         describe('for string key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    jetli.set(typeName, dependency);
+                    await jetli.set(typeName, dependency);
 
-                    jetli.get(typeName);
-                    jetli.get(typeName);
-                    jetli.get(typeName);
+                    await jetli.get(typeName);
+                    await jetli.get(typeName);
+                    await jetli.get(typeName);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
         });
         describe('for constructor key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const dependency: Mock = stubbedConstructorTypes[typeName];
 
-                    jetli.get(dependency);
-                    jetli.get(dependency);
-                    jetli.get(dependency);
+                    await jetli.get(dependency);
+                    await jetli.get(dependency);
+                    await jetli.get(dependency);
                     expect(dependency).toBeCalledTimes(1);
                 });
             });
@@ -479,13 +565,13 @@ describe('Jetli class', () => {
     describe('should initialise constructor with correct arguments via get method', () => {
         describe('for string key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const argument1 = 'abc';
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    jetli.set(typeName, dependency, true, argument1, argument2, argument3);
-                    jetli.get(typeName);
+                    await jetli.set(typeName, dependency, true, argument1, argument2, argument3);
+                    await jetli.get(typeName);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });
@@ -493,12 +579,12 @@ describe('Jetli class', () => {
         });
         describe('for constructor key', () => {
             Object.keys(stubbedConstructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, () => {
+                it(`for ${typeName}`, async () => {
                     const argument1 = 'abc';
                     const argument2 = 123;
                     const argument3 = [1, 2, 3];
                     const dependency: Mock = stubbedConstructorTypes[typeName];
-                    jetli.get(dependency, argument1, argument2, argument3);
+                    await jetli.get(dependency, argument1, argument2, argument3);
 
                     expect(dependency).toBeCalledWith(argument1, argument2, argument3);
                 });
