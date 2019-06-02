@@ -8,6 +8,7 @@ build/
 reports/
 dist/
 docs/
+!src/docs/
 **/dist/
 cache/
 .cache

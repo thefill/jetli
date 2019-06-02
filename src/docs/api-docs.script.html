@@ -1,0 +1,116 @@
+<!-- This script partial should be included just before </body> tag for readme html page -->
+<script>
+
+    initArchivalDocsList();
+    initRunkit();
+
+    // Convert code examples to the Runkit containers
+    function initRunkit() {
+        // setup runkit containers & listeners
+        setupRunkit();
+        setupRunkitListeners();
+
+        // add runkit script to the head
+        const src = document.createElement('script');
+        document.head.appendChild(src);
+        src.onload = () => {
+            const wrappers = Array.from(document.querySelectorAll('.runkit-wrapper.inactive'));
+            startSingleRunkitContainer(wrappers);
+        };
+        src.src = 'https://embed.runkit.com';
+    }
+
+    function setupRunkit() {
+        const codeSources = Array.from(document.getElementsByClassName('runkit-source'));
+
+        // For each container create loader and add it before
+        codeSources.forEach((source) => {
+            const initialHeight = source.clientHeight;
+            const code = source.innerText;
+
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('runkit-wrapper');
+            wrapper.classList.add('inactive');
+            wrapper.style.minHeight = `${initialHeight}px`;
+            wrapper.setAttribute('data-original-code', code);
+
+            // position containers
+            source.before(wrapper);
+
+            // remove original source
+            source.remove();
+        });
+    }
+
+    function startSingleRunkitContainer(wrappers) {
+
+        if (!wrappers.length) {
+            console.log('all containers started!');
+            return;
+        }
+        const wrapper = wrappers.shift();
+        console.log('container init');
+
+        const code = wrapper.dataset.originalCode;
+
+        // const source = node.innerText;
+        // wrapper.removeChild(node);
+        RunKit.createNotebook({
+            element: wrapper,
+            source: code,
+            //
+            // onload: () => {
+            //     console.log('container started!');
+            //     // on creation of container hide loader
+            //     // loader.remove();
+            //     // startSingleRunkitContainer(runkitContainers, runkitLoaders);
+            // },
+            onLoad: () => {
+                wrapper.classList.remove('inactive');
+                // start self-recurring initialisation
+                startSingleRunkitContainer(wrappers);
+            }
+        });
+    }
+
+    function setupRunkitListeners() {
+        // Handle resize of the document
+        window.addEventListener('message', function (e) {
+            if (e.origin !== 'https://runkit.com') {
+                return;
+            }
+
+            try {
+                var data = JSON.parse(e.data);
+            } catch (e) {
+                return false;
+            }
+
+            if (data.context !== 'iframe.resize') {
+                return false;
+            }
+
+            const iframe = document.querySelector('iframe[src="' + data.src + '"]');
+
+            if (!iframe) {
+                return false;
+            }
+
+            if (data.height) {
+                iframe.height = data.height;
+            }
+        });
+    }
+
+    async function initArchivalDocsList() {
+        const response = await fetch('https://api.github.com/repos/thefill/jetli/contents/archive?ref=gh-pages');
+        const data = await response.json();
+        let htmlString = '<ul>';
+        for (let file of data) {
+            htmlString += `<li><a href="${file.path}">API for Jetli v${file.name}</a></li>`;
+        }
+        htmlString += '</ul>';
+        document.querySelector('.tsd-panel.tsd-typography').innerHTML += htmlString;
+    }
+
+</script>
