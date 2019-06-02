@@ -1,16 +1,29 @@
+import {IInjection} from '../../interfaces/injection';
 // Create injection constructor mock
 import {Jetli} from './jetli.class';
-import {IInjection} from '../../interfaces/injection';
 import Mock = jest.Mock;
 
 // Create injection constructor mock
-const injectionMock: IInjection = {
+const uninitialisedInjectionMock: IInjection = {
+    initialised: false,
     init: jest.fn()
 };
 
-class InjectionConstructorMock {
+class UninitialisedInjectionConstructorMock {
     constructor() {
-        return injectionMock;
+        return uninitialisedInjectionMock;
+    }
+}
+
+const initialisedInjectionMock: IInjection = {
+    initialised: true,
+    init: jest.fn()
+};
+
+// tslint:disable-next-line
+class InitialisedInjectionConstructorMock {
+    constructor() {
+        return initialisedInjectionMock;
     }
 }
 
@@ -39,9 +52,10 @@ const primitiveTypes = {
 };
 
 const constructorTypes = {
-    class: ClassConstructorMock,
-    injection: InjectionConstructorMock,
-    function: functionMock
+    'class': ClassConstructorMock,
+    'uninitialised injection': UninitialisedInjectionConstructorMock,
+    'initialised injection': InitialisedInjectionConstructorMock,
+    'function': functionMock
 };
 
 // Stubbed constructors used in later tests when we need to spy execution
@@ -53,9 +67,10 @@ const stubbedConstructorTypes = {
 
 // What should constructor return
 const constructorTypeDerivatives = {
-    class: classObject,
-    injection: injectionMock,
-    function: functionValue
+    'class': classObject,
+    'uninitialised injection': uninitialisedInjectionMock,
+    'initialised injection': initialisedInjectionMock,
+    'function': functionValue
 };
 
 const undefinedDependencies = {
@@ -233,6 +248,58 @@ describe('Jetli class', () => {
 
         expect(serviceA.getId()).toEqual(serviceB.getNumber());
         expect(serviceB.getId()).toEqual(serviceA.getNumber());
+    });
+
+    it('should execute init method if method exists', () => {
+        // tslint:disable-next-line
+        class ServiceA implements IInjection {
+            public initialised = false;
+            public id = 123;
+
+            public init = jest.fn(() => {
+                this.id = 456;
+            });
+        }
+
+        const serviceA = jetli.get(ServiceA);
+
+        expect(serviceA.init).toHaveBeenCalledTimes(1);
+        expect(serviceA.init).toHaveBeenCalledWith(jetli);
+        expect(serviceA.id).toEqual(456);
+    });
+
+    it('should not execute init method if method exists but already initialised', () => {
+        // tslint:disable-next-line
+        class ServiceA implements IInjection {
+            public initialised = true;
+            public id = 123;
+
+            public init = jest.fn(() => {
+                this.id = 456;
+            });
+        }
+
+        const serviceA = jetli.get(ServiceA);
+
+        expect(serviceA.init).not.toBeCalled();
+        expect(serviceA.id).toEqual(123);
+    });
+
+    it('should execute init method if method exists and initialisation property not defined', () => {
+        // tslint:disable-next-line
+        class ServiceA implements IInjection {
+            public id = 123;
+
+            public init = jest.fn(() => {
+                this.id = 456;
+            });
+        }
+
+        const serviceA = jetli.get(ServiceA);
+
+        expect(serviceA.init).toHaveBeenCalledTimes(1);
+        expect(serviceA.init).toHaveBeenCalledWith(jetli);
+        expect(serviceA.id).toEqual(456);
     });
 
     describe('should allow to retrieve dependency with string key via get method', () => {
