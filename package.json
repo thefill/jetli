@@ -1,6 +1,6 @@
 {
     "name": "jetli",
-    "version": "2.0.2",
+    "version": "3.0.0",
     "description": "Simple, lightweight dependency injector - supports factories, classes and primitives.",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",

@@ -13,5 +13,5 @@ export interface IInjection {
      * Initialises injectable
      * @param {IJetli} interject
      */
-    init: (interject: IJetli) => any;
+    init: (interject: IJetli) => Promise<any>;
 }
