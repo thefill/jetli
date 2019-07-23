@@ -63,7 +63,7 @@
         "tslint": "5.16.0",
         "typedoc": "0.14.2",
         "typescript": "3.4.5",
-        "jest-junit": "6.4.0"
+        "jest-junit": "7.0.0"
     },
     "engines": {
         "node": ">=8.x.x"
