@@ -34,21 +34,15 @@ export class Jetli implements IJetli {
      * immediately if initialise set to true.
      * @param {string} key
      * @param {IDependency} dependency
-     * @param {boolean} initialiseOnRequest Should Jetli initialise immediately,
-     *                                          or delay till injection requested
      * @param constructorArgs {...any} Arguments that should be passed to dependency
      *                                 constructor
      */
     public async set<T = any>(
         key: string,
         dependency: IDependency,
-        initialiseOnRequest = true,
         ...constructorArgs
     ): Promise<void> {
-        if (
-            Jetli.inStore(this.dependencies, key) ||
-            Jetli.inStore(this.initialisedDependencies, key)
-        ) {
+        if (this.isSet(key)) {
             throw new Error(`Injectable with key ${key} already set`);
         }
 
@@ -60,11 +54,26 @@ export class Jetli implements IJetli {
             dependency: dependency,
             args: constructorArgs
         };
+    }
 
-        // if required immediate initialisation
-        if (!initialiseOnRequest) {
-            await this.initialiseDependency<T>(key);
+    /**
+     * Checks if dependency already set
+     * @param {IDependency | string} dependency
+     * @returns {boolean}
+     */
+    public isSet(dependency: IDependency | string): boolean {
+        let key;
+        if (typeof dependency === 'string') {
+            key = dependency;
+        } else if (dependency && dependency.name) {
+            key = dependency.name;
+        } else {
+            // we cant get key
+            return false;
         }
+
+        return Jetli.inStore(this.dependencies, key) ||
+            Jetli.inStore(this.initialisedDependencies, key);
     }
 
     /**
@@ -161,7 +170,9 @@ export class Jetli implements IJetli {
                     // initialise injectable
                     await finalDependency.init(this);
                 } catch (error) {
-                    throw new Error(`Error while initialising dependency for key ${key}.`);
+                    // tslint:disable-next-line
+                    console.error(`Error while initialising dependency for key ${key}.`);
+                    throw error;
                 }
             }
         }

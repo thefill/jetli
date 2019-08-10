@@ -136,31 +136,6 @@ fighter2.punch();</pre>
 
 ## Advanced usage
 
-### Delay initialisation of services until used (on injection request)
-
-Have enough of overhead when all those services initialises at once? Register them and request initialisation only when injection is requested.
-
-<pre class="runkit-source">const jetli = require('jetli@3.0.1').jetli;
-
-class Attack {
-    constructor(){
-        this.id = Math.round(Math.random() * 100);
-        console.log(`Attack no. ${this.id} ready!`);
-    }
-    punch(){
-        console.log(`Attack no. ${this.id} executed!`);
-    }
-}
-
-await jetli.set('attack', Attack, true);
-console.log('No initialisation at this point');
-
-const fighter1 = await jetli.get('attack');
-const fighter2 = await jetli.get('attack');
-
-fighter1.punch();
-fighter2.punch();</pre>
-
 ### Pass arguments to services constructor
 
 <pre class="runkit-source">const jetli = require('jetli@3.0.1').jetli;
@@ -237,7 +212,7 @@ console.log(serviceB.getId());</pre>
 
 ### Mock services for test purposes
 
-Its rather trivial to mock module dependencies if you have total control whats injected where, right? ith Jetli you can reset any previously registered/injected dependencies and introduce your own mocks / stubs.
+Its rather trivial to mock module dependencies if you have total control whats injected where, right? With Jetli you can reset any previously registered/injected dependencies and introduce your own mocks / stubs.
 
 <pre class="runkit-source">const jetli = require('jetli@3.0.1').jetli;
 
