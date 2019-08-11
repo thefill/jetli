@@ -63,12 +63,9 @@ export class Jetli implements IJetli {
      */
     public isSet(dependency: IDependency | string): boolean {
         let key;
-        if (typeof dependency === 'string') {
-            key = dependency;
-        } else if (dependency && dependency.name) {
-            key = dependency.name;
-        } else {
-            // we cant get key
+        try{
+            key = this.getKey(dependency);
+        } catch (error) {
             return false;
         }
 
@@ -125,6 +122,25 @@ export class Jetli implements IJetli {
         }
 
         return this.initialiseDependency<T>(key);
+    }
+
+    /**
+     * Get key for dependency
+     * @param {IDependency | string} dependency
+     * @returns {string}
+     */
+    protected getKey(dependency: IDependency | string): string {
+        let key;
+        if (typeof dependency === 'string') {
+            key = dependency;
+        } else if (dependency && dependency.name) {
+            key = dependency.name;
+        } else {
+            // we cant get key
+            throw new Error('Unable to extract dependency key');
+        }
+
+        return key;
     }
 
     /**
