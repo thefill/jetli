@@ -383,6 +383,19 @@ describe('Jetli class', () => {
                 });
             });
         });
+        Object.keys(constructorTypes).forEach((typeName) => {
+            it(`for ${typeName}`, async () => {
+                const dependency = constructorTypes[typeName];
+                await jetli.get(dependency);
+                jetli.unset(dependency);
+
+                try {
+                    await jetli.get(typeName);
+                } catch (error) {
+                    expect(error).toBeTruthy();
+                }
+            });
+        });
     });
 
     describe('should throw error when init method fails for injectable', () => {
@@ -440,6 +453,20 @@ describe('Jetli class', () => {
                         expect(error).toBeTruthy();
                     }
                 });
+            });
+        });
+
+        Object.keys(constructorTypes).forEach((typeName) => {
+            it(`for ${typeName}`, async () => {
+                const dependency = constructorTypes[typeName];
+                await jetli.get(dependency);
+                jetli.unset(dependency);
+
+                try {
+                    await jetli.get(typeName);
+                } catch (error) {
+                    expect(error).toBeTruthy();
+                }
             });
         });
     });
