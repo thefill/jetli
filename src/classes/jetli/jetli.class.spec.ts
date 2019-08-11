@@ -92,10 +92,7 @@ const invalidDependencyIdentificators = {
     // tslint:disable-next-line
     'number': 123,
     // tslint:disable-next-line
-    'array': [],
-    // tslint:disable-next-line
-    'arrow function': () => {
-    }
+    'array': []
 };
 
 describe('Jetli class', () => {
@@ -375,11 +372,13 @@ describe('Jetli class', () => {
                     await jetli.set(typeName, dependency);
                     jetli.unset(typeName);
 
+                    let expectedError;
                     try {
                         await jetli.get(typeName);
                     } catch (error) {
-                        expect(error).toBeTruthy();
+                        expectedError = error;
                     }
+                    expect(expectedError).toBeInstanceOf(Error);
                 });
             });
         });
@@ -389,11 +388,29 @@ describe('Jetli class', () => {
                 await jetli.get(dependency);
                 jetli.unset(dependency);
 
+                let expectedError;
                 try {
-                    await jetli.get(typeName);
+                    await jetli.get(dependency.name);
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
+            });
+        });
+    });
+
+    describe('should not raise error when wrong key provided for unset method', () => {
+        Object.keys(primitiveTypes).forEach((typeName) => {
+            it(`for ${typeName}`, async () => {
+                const dependency = primitiveTypes[typeName];
+
+                let expectedError;
+                try {
+                    jetli.unset(dependency);
+                } catch (error) {
+                    expectedError = error;
+                }
+                expect(expectedError).not.toBeInstanceOf(Error);
             });
         });
     });
@@ -408,15 +425,19 @@ describe('Jetli class', () => {
                     public initialised = false;
 
                     public init = jest.fn(() => {
-                        return Promise.reject('error');
+                        throw new Error('error');
                     });
                 }
 
+                await jetli.set('some-id', ServiceA);
+
+                let expectedError;
                 try {
-                    await jetli.set('some-id', ServiceA, false);
+                    await jetli.get('some-id');
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
             });
 
             it('for get method', async () => {
@@ -425,15 +446,17 @@ describe('Jetli class', () => {
                     public initialised = false;
 
                     public init = jest.fn(() => {
-                        return Promise.reject('error');
+                        throw new Error('error');
                     });
                 }
 
+                let expectedError;
                 try {
                     const serviceA = await jetli.get(ServiceA);
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
             });
 
         });
@@ -447,11 +470,13 @@ describe('Jetli class', () => {
                     await jetli.set(typeName, dependency);
                     jetli.unset(typeName);
 
+                    let expectedError;
                     try {
                         await jetli.get(typeName);
                     } catch (error) {
-                        expect(error).toBeTruthy();
+                        expectedError = error;
                     }
+                    expect(expectedError).toBeInstanceOf(Error);
                 });
             });
         });
@@ -462,11 +487,13 @@ describe('Jetli class', () => {
                 await jetli.get(dependency);
                 jetli.unset(dependency);
 
+                let expectedError;
                 try {
-                    await jetli.get(typeName);
+                    await jetli.get(dependency.name);
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
             });
         });
     });
@@ -475,23 +502,8 @@ describe('Jetli class', () => {
         describe(`for string key`, () => {
             Object.keys(constructorTypes).forEach((typeName) => {
                 it(`for ${typeName}`, async () => {
-                    const dependency = constructorTypes[typeName];
-
                     try {
                         await jetli.get(typeName);
-                    } catch (error) {
-                        expect(error).toBeTruthy();
-                    }
-                });
-            });
-        });
-        describe(`for constructor key`, () => {
-            Object.keys(constructorTypes).forEach((typeName) => {
-                it(`for ${typeName}`, async () => {
-                    const dependency = constructorTypes[typeName];
-
-                    try {
-                        await jetli.get(dependency);
                     } catch (error) {
                         expect(error).toBeTruthy();
                     }
@@ -505,11 +517,13 @@ describe('Jetli class', () => {
             it(`for ${typeName} dependency`, async () => {
                 const dependency = constructorTypes[typeName];
 
+                let expectedError;
                 try {
                     await jetli.set('someType', dependency);
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
             });
         });
     });
@@ -519,11 +533,13 @@ describe('Jetli class', () => {
             it(`for ${typeName} dependency`, async () => {
                 const identificator = invalidDependencyIdentificators[typeName];
 
+                let expectedError;
                 try {
                     await jetli.get(identificator);
                 } catch (error) {
-                    expect(error).toBeTruthy();
+                    expectedError = error;
                 }
+                expect(expectedError).toBeInstanceOf(Error);
             });
         });
     });
