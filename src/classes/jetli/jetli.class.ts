@@ -75,11 +75,19 @@ export class Jetli implements IJetli {
 
     /**
      * Unregister dependency (also primitive values) by key
-     * @param {string} key
+     * @param {IDependency | string} dependency
      */
     public unset<T = any>(
-        key: string
+        dependency: IDependency | string
     ): void {
+
+        let key;
+        try{
+            key = this.getKey(dependency);
+        } catch (error) {
+            return;
+        }
+
         delete this.dependencies[key];
         delete this.initialisedDependencies[key];
     }
